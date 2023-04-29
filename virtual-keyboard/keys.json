@@ -1,0 +1,64 @@
+{
+  "keys": [
+    {
+      "text": "`",
+      "code": "Backquote"
+    },
+    {
+      "text": "1",
+      "code": "Digit1"
+    },
+    {
+      "text": "2",
+      "code": "Digit2"
+    },
+    {
+      "text": "3",
+      "code": "Digit3"
+    },
+    {
+      "text": "4",
+      "code": "Digit4"
+    },
+    {
+      "text": "5",
+      "code": "Digit5"
+    },
+    {
+      "text": "6",
+      "code": "Digit6"
+    },
+    {
+      "text": "7",
+      "code": "Digit7"
+    },
+    {
+      "text": "8",
+      "code": "Digit8"
+    },
+    {
+      "text": "9",
+      "code": "Digit9"
+    },
+    {
+      "text": "0",
+      "code": "Digit0"
+    },
+    {
+      "text": "-",
+      "code": "NumpadSubtract"
+    },
+    {
+      "text": "=",
+      "code": "Equal"
+    },
+    {
+      "text": "=",
+      "code": "Equal"
+    },
+    {
+      "text": "Backspace",
+      "code": "Backspace"
+    }
+  ]
+}
