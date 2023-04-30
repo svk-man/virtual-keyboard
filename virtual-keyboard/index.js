@@ -77,9 +77,18 @@ function createKeyboardKey(key) {
   const keyboardKey = document.createElement('button');
   const langText = key['text'];
   const shiftText = key['shiftText'];
+  const code = key['code'];
 
   keyboardKey.className = 'keyboard__key';
-  keyboardKey.dataset[KEYBOARD_KEY_DATASET.CODE] = key['code'];
+  if (code === 'CapsLock' || code === 'Enter' || code === 'ShiftLeft' || code === 'ShiftRight') {
+    keyboardKey.classList.add('keyboard__key--large');
+  }
+
+  if (code === 'Space') {
+    keyboardKey.classList.add('keyboard__key--space');
+  }
+
+  keyboardKey.dataset[KEYBOARD_KEY_DATASET.CODE] = code;
 
   if (typeof langText === 'object') {
     keyboardKey.textContent = langText[currentLang];

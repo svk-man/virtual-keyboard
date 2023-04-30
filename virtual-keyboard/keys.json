@@ -310,12 +310,12 @@
     },
     {
       "text": {
-        "en": "Delete",
-        "ru": "Delete"
+        "en": "Del",
+        "ru": "Del"
       },
       "shiftText": {
-        "en": "Delete",
-        "ru": "Delete"
+        "en": "Del",
+        "ru": "Del"
       },
       "code": "Delete"
     },

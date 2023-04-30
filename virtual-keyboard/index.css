@@ -16,19 +16,44 @@ body {
   margin: 0 auto;
 }
 
+.keyboard {
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #2B2B2D;
+}
+
 .keyboard__keys {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 10px;
+  gap: 5px;
 }
 
 .keyboard__key {
   min-width: 50px;
-  height: 50px;
-  border: 3px solid gainsboro;
+  padding: 14px;
+  border: 3px solid #646464;
+  border-radius: 9px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  color: white;
+  background-color: #646464;
+}
+
+.keyboard__key:hover {
+  cursor: pointer;
+  border-color: white;
 }
 
 .keyboard__key--active {
-  border: 3px solid forestgreen;
+  background-color: #0F77F0;
+  border-color: #0F77F0;
+}
+
+.keyboard__key--large {
+  min-width: 100px;
+}
+
+.keyboard__key--space {
+  flex: 1;
 }
