@@ -1,7 +1,10 @@
 {
   "keys": [
     {
-      "text": "`",
+      "text": {
+        "en": "`",
+        "ru": "ё"
+      },
       "code": "Backquote"
     },
     {
@@ -61,51 +64,87 @@
       "code": "Tab"
     },
     {
-      "text": "q",
+      "text": {
+        "en": "q",
+        "ru": "й"
+      },
       "code": "KeyQ"
     },
     {
-      "text": "w",
+      "text": {
+        "en": "w",
+        "ru": "ц"
+      },
       "code": "KeyW"
     },
     {
-      "text": "e",
+      "text": {
+        "en": "e",
+        "ru": "у"
+      },
       "code": "KeyE"
     },
     {
-      "text": "r",
+      "text": {
+        "en": "r",
+        "ru": "к"
+      },
       "code": "KeyR"
     },
     {
-      "text": "t",
+      "text": {
+        "en": "t",
+        "ru": "е"
+      },
       "code": "KeyT"
     },
     {
-      "text": "y",
+      "text": {
+        "en": "y",
+        "ru": "н"
+      },
       "code": "KeyY"
     },
     {
-      "text": "u",
+      "text": {
+        "en": "u",
+        "ru": "г"
+      },
       "code": "KeyU"
     },
     {
-      "text": "i",
+      "text": {
+        "en": "i",
+        "ru": "ш"
+      },
       "code": "KeyI"
     },
     {
-      "text": "o",
+      "text": {
+        "en": "o",
+        "ru": "щ"
+      },
       "code": "KeyO"
     },
     {
-      "text": "p",
+      "text": {
+        "en": "p",
+        "ru": "з"
+      },
       "code": "KeyP"
     },
     {
-      "text": "[",
+      "text": {
+        "en": "[",
+        "ru": "х"
+      },
       "code": "BracketLeft"
     },
     {
-      "text": "]",
+      "text": {
+        "en": "]",
+        "ru": "ъ"
+      },
       "code": "BracketRight"
     },
     {
@@ -121,47 +160,80 @@
       "code": "CapsLock"
     },
     {
-      "text": "a",
+      "text": {
+        "en": "a",
+        "ru": "ф"
+      },
       "code": "KeyA"
     },
     {
-      "text": "s",
+      "text": {
+        "en": "s",
+        "ru": "ы"
+      },
       "code": "KeyS"
     },
     {
-      "text": "d",
+      "text": {
+        "en": "d",
+        "ru": "в"
+      },
       "code": "KeyD"
     },
     {
-      "text": "f",
+      "text": {
+        "en": "f",
+        "ru": "а"
+      },
       "code": "KeyF"
     },
     {
-      "text": "g",
+      "text": {
+        "en": "g",
+        "ru": "п"
+      },
       "code": "KeyG"
     },
     {
-      "text": "h",
+      "text": {
+        "en": "h",
+        "ru": "р"
+      },
       "code": "KeyH"
     },
     {
-      "text": "j",
+      "text": {
+        "en": "j",
+        "ru": "о"
+      },
       "code": "KeyJ"
     },
     {
-      "text": "k",
+      "text": {
+        "en": "k",
+        "ru": "л"
+      },
       "code": "KeyK"
     },
     {
-      "text": "l",
+      "text": {
+        "en": "l",
+        "ru": "д"
+      },
       "code": "KeyL"
     },
     {
-      "text": ";",
+      "text": {
+        "en": ";",
+        "ru": "ж"
+      },
       "code": "Semicolon"
     },
     {
-      "text": "'",
+      "text": {
+        "en": "'",
+        "ru": "э"
+      },
       "code": "Quote"
     },
     {
@@ -173,43 +245,73 @@
       "code": "ShiftLeft"
     },
     {
-      "text": "z",
+      "text": {
+        "en": "z",
+        "ru": "я"
+      },
       "code": "KeyZ"
     },
     {
-      "text": "x",
+      "text": {
+        "en": "x",
+        "ru": "ч"
+      },
       "code": "KeyX"
     },
     {
-      "text": "c",
+      "text": {
+        "en": "c",
+        "ru": "с"
+      },
       "code": "KeyC"
     },
     {
-      "text": "v",
+      "text": {
+        "en": "v",
+        "ru": "м"
+      },
       "code": "KeyV"
     },
     {
-      "text": "b",
+      "text": {
+        "en": "b",
+        "ru": "и"
+      },
       "code": "KeyB"
     },
     {
-      "text": "n",
+      "text": {
+        "en": "n",
+        "ru": "т"
+      },
       "code": "KeyN"
     },
     {
-      "text": "m",
+      "text": {
+        "en": "m",
+        "ru": "ь"
+      },
       "code": "KeyM"
     },
     {
-      "text": ",",
+      "text": {
+        "en": ",",
+        "ru": "б"
+      },
       "code": "Comma"
     },
     {
-      "text": ".",
+      "text": {
+        "en": ".",
+        "ru": "ю"
+      },
       "code": "Period"
     },
     {
-      "text": "/",
+      "text": {
+        "en": "/",
+        "ru": "."
+      },
       "code": "Slash"
     },
     {

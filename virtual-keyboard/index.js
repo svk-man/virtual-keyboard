@@ -1,3 +1,16 @@
+const LANG = {
+  'EN': 'en',
+  'RU': 'ru',
+};
+
+let currentLang = LANG.EN;
+
+const KEYBOARD_KEY_DATASET = {
+  'CODE': 'code',
+  'LANG_EN': 'langEn',
+  'LANG_RU': 'langRu',
+}
+
 showKeyboard();
 
 async function showKeyboard() {
@@ -11,7 +24,9 @@ async function showKeyboard() {
 
     document.addEventListener('keydown', handleKeyDown);
     document.addEventListener('keyup', handleKeyUp);
-  } catch(err) {}
+  } catch(err) {
+    console.log(err);
+  }
 }
 
 async function getKeysJson() {
@@ -59,8 +74,15 @@ function createKeyboardKey(key) {
   const keyboardKey = document.createElement('button');
 
   keyboardKey.className = 'keyboard__key';
-  keyboardKey.textContent = key['text'];
-  keyboardKey.dataset['code'] = key['code'];
+  keyboardKey.dataset[KEYBOARD_KEY_DATASET.CODE] = key['code'];
+
+  if (typeof key['text'] === 'object') {
+    keyboardKey.textContent = key['text'][currentLang];
+    keyboardKey.dataset[KEYBOARD_KEY_DATASET.LANG_EN] = key['text'][LANG.EN];
+    keyboardKey.dataset[KEYBOARD_KEY_DATASET.LANG_RU] = key['text'][LANG.RU];
+  } else {
+    keyboardKey.textContent = key['text'];
+  }
 
   return keyboardKey;
 }
@@ -70,6 +92,27 @@ function handleKeyDown(event) {
   const keyboardKey = document.querySelector(`[data-code="${keyCode}"`);
 
   setActiveKeyboardKey(keyboardKey);
+
+  if (event.shiftKey && event.altKey) {
+    toggleLanguage();
+    updateKeyboardKeyTexts();
+  }
+}
+
+function toggleLanguage() {
+  currentLang = currentLang === LANG.EN ? LANG.RU : LANG.EN;
+}
+
+function updateKeyboardKeyTexts() {
+  const keyboardKeys = document.querySelectorAll(`[data-code]`);
+
+  keyboardKeys.forEach(keyboardKey => {
+    const textEn = keyboardKey.dataset[KEYBOARD_KEY_DATASET.LANG_EN];
+    const textRu = keyboardKey.dataset[KEYBOARD_KEY_DATASET.LANG_RU];
+    if (textEn && textRu) {
+      keyboardKey.textContent = currentLang === LANG.EN ? textEn : textRu;
+    }
+  });
 }
 
 function setActiveKeyboardKey(keyboardKey) {
