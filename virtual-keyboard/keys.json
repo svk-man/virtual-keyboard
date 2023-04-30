@@ -303,8 +303,8 @@
         "ru": "\\"
       },
       "shiftText": {
-        "en": "\\",
-        "ru": "\\"
+        "en": "|",
+        "ru": "/"
       },
       "code": "Backslash"
     },

@@ -103,10 +103,6 @@ function handleKeyDown(event) {
 
   setActiveKeyboardKey(keyboardKey);
 
-  if (event.shiftKey && event.altKey) {
-    toggleLang();
-  }
-
   updateKeyboardKeyTexts(event.shiftKey, isCapsLockPressed);
 }
 
@@ -140,6 +136,10 @@ function handleKeyUp(event) {
 
   if (keyCode === 'CapsLock') {
     isCapsLockPressed = !isCapsLockPressed;
+  }
+
+  if (event.shiftKey && event.altKey) {
+    toggleLang();
   }
 
   setInactiveKeyboardKey(keyboardKey);
