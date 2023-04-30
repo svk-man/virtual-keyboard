@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   min-height: 100vh;
   margin: 0;
@@ -22,4 +26,9 @@ body {
 .keyboard__key {
   min-width: 50px;
   height: 50px;
+  border: 3px solid gainsboro;
+}
+
+.keyboard__key--active {
+  border: 3px solid forestgreen;
 }

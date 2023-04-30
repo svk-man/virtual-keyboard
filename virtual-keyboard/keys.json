@@ -46,11 +46,7 @@
     },
     {
       "text": "-",
-      "code": "NumpadSubtract"
-    },
-    {
-      "text": "=",
-      "code": "Equal"
+      "code": "Minus"
     },
     {
       "text": "=",

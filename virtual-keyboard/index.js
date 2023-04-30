@@ -8,6 +8,9 @@ async function showKeyboard() {
 
     keyboardWrapper.append(keyboard);
     document.body.append(keyboardWrapper);
+
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keyup', handleKeyUp);
   } catch(err) {}
 }
 
@@ -57,6 +60,29 @@ function createKeyboardKey(key) {
 
   keyboardKey.className = 'keyboard__key';
   keyboardKey.textContent = key['text'];
+  keyboardKey.dataset['code'] = key['code'];
 
   return keyboardKey;
+}
+
+function handleKeyDown(event) {
+  const keyCode = event.code;
+  const keyboardKey = document.querySelector(`[data-code="${keyCode}"`);
+
+  setActiveKeyboardKey(keyboardKey);
+}
+
+function setActiveKeyboardKey(keyboardKey) {
+  keyboardKey.classList.add('keyboard__key--active');
+}
+
+function handleKeyUp(event) {
+  const keyCode = event.code;
+  const keyboardKey = document.querySelector(`[data-code="${keyCode}"`);
+
+  setInactiveKeyboardKey(keyboardKey);
+}
+
+function setInactiveKeyboardKey(keyboardKey) {
+  keyboardKey.classList.remove('keyboard__key--active');
 }
