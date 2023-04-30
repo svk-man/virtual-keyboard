@@ -14,16 +14,20 @@ const KEYBOARD_KEY_DATASET = {
   'SHIFT_TEXT_RU': 'shiftTextRu',
 }
 
-showKeyboard();
+init();
 
-async function showKeyboard() {
+async function init() {
   try {
+    const wrapper = createWrapper();
+    const display = createDisplay();
+
     const keysJson = await getKeysJson();
-    const keyboardWrapper = createKeyboardWrapper();
     const keyboard = createKeyboard(keysJson.keys);
 
-    keyboardWrapper.append(keyboard);
-    document.body.append(keyboardWrapper);
+    wrapper.append(display);
+    wrapper.append(keyboard);
+
+    document.body.append(wrapper);
 
     document.addEventListener('keydown', handleKeyDown);
     document.addEventListener('keyup', handleKeyUp);
@@ -44,12 +48,12 @@ async function getKeysJson() {
   throw new Error(response.status);
 }
 
-function createKeyboardWrapper() {
-  const keyboardWrapper = document.createElement('div');
+function createWrapper() {
+  const wrapper = document.createElement('div');
 
-  keyboardWrapper.className = 'wrapper';
+  wrapper.className = 'wrapper';
 
-  return keyboardWrapper;
+  return wrapper;
 }
 
 function createKeyboard(keys) {
@@ -161,4 +165,19 @@ function setInactiveKeyboardKey(keyboardKey) {
 
 function isLetter(str) {
   return str.length === 1 && str.match(/[a-zA-Zа-яА-Я]/i);
+}
+
+function createDisplay() {
+  const displayWrapper = document.createElement('div');
+  const displayTextarea = document.createElement('textarea');
+
+  displayWrapper.className = 'display';
+  displayTextarea.className = 'display__textarea';
+
+  displayTextarea.rows = 10;
+  displayTextarea.cols = 20;
+
+  displayWrapper.append(displayTextarea);
+
+  return displayWrapper;
 }

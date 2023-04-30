@@ -16,10 +16,35 @@ body {
   margin: 0 auto;
 }
 
+.display,
 .keyboard {
   padding: 10px;
   border-radius: 10px;
   background-color: #2B2B2D;
+}
+
+.display {
+  padding-bottom: 50px;
+  background: #2B2B2D url("rs-school-js.svg") no-repeat center bottom 12px;
+  background-size: 80px;
+}
+
+.display__textarea {
+  width: 100%;
+  padding: 10px;
+  border: 0;
+  resize: none;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.display__textarea:focus-visible {
+  outline: none;
+}
+
+.keyboard {
+  margin-top: 10px;
 }
 
 .keyboard__keys {
