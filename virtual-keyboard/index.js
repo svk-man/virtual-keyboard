@@ -7,8 +7,10 @@ let currentLang = LANG.EN;
 
 const KEYBOARD_KEY_DATASET = {
   'CODE': 'code',
-  'LANG_EN': 'langEn',
-  'LANG_RU': 'langRu',
+  'TEXT_EN': 'textEn',
+  'TEXT_RU': 'textRu',
+  'SHIFT_TEXT_EN': 'shiftTextEn',
+  'SHIFT_TEXT_RU': 'shiftTextRu',
 }
 
 showKeyboard();
@@ -72,16 +74,23 @@ function createKeyboardKeys(keys) {
 
 function createKeyboardKey(key) {
   const keyboardKey = document.createElement('button');
+  const langText = key['text'];
+  const shiftText = key['shiftText'];
 
   keyboardKey.className = 'keyboard__key';
   keyboardKey.dataset[KEYBOARD_KEY_DATASET.CODE] = key['code'];
 
-  if (typeof key['text'] === 'object') {
-    keyboardKey.textContent = key['text'][currentLang];
-    keyboardKey.dataset[KEYBOARD_KEY_DATASET.LANG_EN] = key['text'][LANG.EN];
-    keyboardKey.dataset[KEYBOARD_KEY_DATASET.LANG_RU] = key['text'][LANG.RU];
+  if (typeof langText === 'object') {
+    keyboardKey.textContent = langText[currentLang];
+    keyboardKey.dataset[KEYBOARD_KEY_DATASET.TEXT_EN] = key['text'][LANG.EN];
+    keyboardKey.dataset[KEYBOARD_KEY_DATASET.TEXT_RU] = key['text'][LANG.RU];
   } else {
     keyboardKey.textContent = key['text'];
+  }
+
+  if (shiftText) {
+    keyboardKey.dataset[KEYBOARD_KEY_DATASET.SHIFT_TEXT_EN] = key['shiftText'][LANG.EN];
+    keyboardKey.dataset[KEYBOARD_KEY_DATASET.SHIFT_TEXT_RU] = key['shiftText'][LANG.RU];
   }
 
   return keyboardKey;
@@ -94,21 +103,22 @@ function handleKeyDown(event) {
   setActiveKeyboardKey(keyboardKey);
 
   if (event.shiftKey && event.altKey) {
-    toggleLanguage();
-    updateKeyboardKeyTexts();
+    toggleLang();
   }
+
+  changeKeyboardKeyLangTexts(event.shiftKey);
 }
 
-function toggleLanguage() {
+function toggleLang() {
   currentLang = currentLang === LANG.EN ? LANG.RU : LANG.EN;
 }
 
-function updateKeyboardKeyTexts() {
+function changeKeyboardKeyLangTexts(isShiftPressed) {
   const keyboardKeys = document.querySelectorAll(`[data-code]`);
 
   keyboardKeys.forEach(keyboardKey => {
-    const textEn = keyboardKey.dataset[KEYBOARD_KEY_DATASET.LANG_EN];
-    const textRu = keyboardKey.dataset[KEYBOARD_KEY_DATASET.LANG_RU];
+    const textEn = isShiftPressed ? keyboardKey.dataset[KEYBOARD_KEY_DATASET.SHIFT_TEXT_EN] : keyboardKey.dataset[KEYBOARD_KEY_DATASET.TEXT_EN];
+    const textRu = isShiftPressed ? keyboardKey.dataset[KEYBOARD_KEY_DATASET.SHIFT_TEXT_RU] : keyboardKey.dataset[KEYBOARD_KEY_DATASET.TEXT_RU];
     if (textEn && textRu) {
       keyboardKey.textContent = currentLang === LANG.EN ? textEn : textRu;
     }
@@ -124,6 +134,7 @@ function handleKeyUp(event) {
   const keyboardKey = document.querySelector(`[data-code="${keyCode}"`);
 
   setInactiveKeyboardKey(keyboardKey);
+  changeKeyboardKeyLangTexts(event.shiftKey);
 }
 
 function setInactiveKeyboardKey(keyboardKey) {

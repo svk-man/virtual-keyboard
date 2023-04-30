@@ -5,68 +5,174 @@
         "en": "`",
         "ru": "ё"
       },
+      "shiftText": {
+        "en": "~",
+        "ru": "Ё"
+      },
       "code": "Backquote"
     },
     {
-      "text": "1",
+      "text": {
+        "en": "1",
+        "ru": "1"
+      },
+      "shiftText": {
+        "en": "!",
+        "ru": "!"
+      },
       "code": "Digit1"
     },
     {
-      "text": "2",
+      "text": {
+        "en": "2",
+        "ru": "2"
+      },
+      "shiftText": {
+        "en": "@",
+        "ru": "\""
+      },
       "code": "Digit2"
     },
     {
-      "text": "3",
+      "text": {
+        "en": "3",
+        "ru": "3"
+      },
+      "shiftText": {
+        "en": "#",
+        "ru": "№"
+      },
       "code": "Digit3"
     },
     {
-      "text": "4",
+      "text": {
+        "en": "4",
+        "ru": "4"
+      },
+      "shiftText": {
+        "en": "$",
+        "ru": ";"
+      },
       "code": "Digit4"
     },
     {
-      "text": "5",
+      "text": {
+        "en": "5",
+        "ru": "5"
+      },
+      "shiftText": {
+        "en": "%",
+        "ru": "%"
+      },
       "code": "Digit5"
     },
     {
-      "text": "6",
+      "text": {
+        "en": "6",
+        "ru": "6"
+      },
+      "shiftText": {
+        "en": "^",
+        "ru": ":"
+      },
       "code": "Digit6"
     },
     {
-      "text": "7",
+      "text": {
+        "en": "7",
+        "ru": "7"
+      },
+      "shiftText": {
+        "en": "&",
+        "ru": "?"
+      },
       "code": "Digit7"
     },
     {
-      "text": "8",
+      "text": {
+        "en": "8",
+        "ru": "8"
+      },
+      "shiftText": {
+        "en": "*",
+        "ru": "*"
+      },
       "code": "Digit8"
     },
     {
-      "text": "9",
+      "text": {
+        "en": "9",
+        "ru": "9"
+      },
+      "shiftText": {
+        "en": "(",
+        "ru": "("
+      },
       "code": "Digit9"
     },
     {
-      "text": "0",
+      "text": {
+        "en": "0",
+        "ru": "0"
+      },
+      "shiftText": {
+        "en": ")",
+        "ru": ")"
+      },
       "code": "Digit0"
     },
     {
-      "text": "-",
+      "text": {
+        "en": "-",
+        "ru": "-"
+      },
+      "shiftText": {
+        "en": "_",
+        "ru": "_"
+      },
       "code": "Minus"
     },
     {
-      "text": "=",
+      "text": {
+        "en": "=",
+        "ru": "="
+      },
+      "shiftText": {
+        "en": "+",
+        "ru": "+"
+      },
       "code": "Equal"
     },
     {
-      "text": "Backspace",
+      "text": {
+        "en": "Backspace",
+        "ru": "Backspace"
+      },
+      "shiftText": {
+        "en": "Backspace",
+        "ru": "Backspace"
+      },
       "code": "Backspace"
     },
     {
-      "text": "Tab",
+      "text": {
+        "en": "Tab",
+        "ru": "Tab"
+      },
+      "shiftText": {
+        "en": "Tab",
+        "ru": "Tab"
+      },
       "code": "Tab"
     },
     {
       "text": {
         "en": "q",
         "ru": "й"
+      },
+      "shiftText": {
+        "en": "Q",
+        "ru": "Й"
       },
       "code": "KeyQ"
     },
@@ -75,12 +181,20 @@
         "en": "w",
         "ru": "ц"
       },
+      "shiftText": {
+        "en": "W",
+        "ru": "Ц"
+      },
       "code": "KeyW"
     },
     {
       "text": {
         "en": "e",
         "ru": "у"
+      },
+      "shiftText": {
+        "en": "E",
+        "ru": "У"
       },
       "code": "KeyE"
     },
@@ -89,12 +203,20 @@
         "en": "r",
         "ru": "к"
       },
+      "shiftText": {
+        "en": "R",
+        "ru": "К"
+      },
       "code": "KeyR"
     },
     {
       "text": {
         "en": "t",
         "ru": "е"
+      },
+      "shiftText": {
+        "en": "T",
+        "ru": "Е"
       },
       "code": "KeyT"
     },
@@ -103,12 +225,20 @@
         "en": "y",
         "ru": "н"
       },
+      "shiftText": {
+        "en": "Y",
+        "ru": "Н"
+      },
       "code": "KeyY"
     },
     {
       "text": {
         "en": "u",
         "ru": "г"
+      },
+      "shiftText": {
+        "en": "U",
+        "ru": "Г"
       },
       "code": "KeyU"
     },
@@ -117,12 +247,20 @@
         "en": "i",
         "ru": "ш"
       },
+      "shiftText": {
+        "en": "I",
+        "ru": "Ш"
+      },
       "code": "KeyI"
     },
     {
       "text": {
         "en": "o",
         "ru": "щ"
+      },
+      "shiftText": {
+        "en": "O",
+        "ru": "Щ"
       },
       "code": "KeyO"
     },
@@ -131,12 +269,20 @@
         "en": "p",
         "ru": "з"
       },
+      "shiftText": {
+        "en": "P",
+        "ru": "З"
+      },
       "code": "KeyP"
     },
     {
       "text": {
         "en": "[",
         "ru": "х"
+      },
+      "shiftText": {
+        "en": "{",
+        "ru": "Х"
       },
       "code": "BracketLeft"
     },
@@ -145,24 +291,53 @@
         "en": "]",
         "ru": "ъ"
       },
+      "shiftText": {
+        "en": "}",
+        "ru": "Ъ"
+      },
       "code": "BracketRight"
     },
     {
-      "text": "\\",
+      "text": {
+        "en": "\\",
+        "ru": "\\"
+      },
+      "shiftText": {
+        "en": "\\",
+        "ru": "\\"
+      },
       "code": "Backslash"
     },
     {
-      "text": "Delete",
+      "text": {
+        "en": "Delete",
+        "ru": "Delete"
+      },
+      "shiftText": {
+        "en": "Delete",
+        "ru": "Delete"
+      },
       "code": "Delete"
     },
     {
-      "text": "CapsLock",
+      "text": {
+        "en": "CapsLock",
+        "ru": "CapsLock"
+      },
+      "shiftText": {
+        "en": "CapsLock",
+        "ru": "CapsLock"
+      },
       "code": "CapsLock"
     },
     {
       "text": {
         "en": "a",
         "ru": "ф"
+      },
+      "shiftText": {
+        "en": "A",
+        "ru": "Ф"
       },
       "code": "KeyA"
     },
@@ -171,12 +346,20 @@
         "en": "s",
         "ru": "ы"
       },
+      "shiftText": {
+        "en": "S",
+        "ru": "Ы"
+      },
       "code": "KeyS"
     },
     {
       "text": {
         "en": "d",
         "ru": "в"
+      },
+      "shiftText": {
+        "en": "D",
+        "ru": "В"
       },
       "code": "KeyD"
     },
@@ -185,12 +368,20 @@
         "en": "f",
         "ru": "а"
       },
+      "shiftText": {
+        "en": "F",
+        "ru": "А"
+      },
       "code": "KeyF"
     },
     {
       "text": {
         "en": "g",
         "ru": "п"
+      },
+      "shiftText": {
+        "en": "G",
+        "ru": "П"
       },
       "code": "KeyG"
     },
@@ -199,12 +390,20 @@
         "en": "h",
         "ru": "р"
       },
+      "shiftText": {
+        "en": "H",
+        "ru": "Р"
+      },
       "code": "KeyH"
     },
     {
       "text": {
         "en": "j",
         "ru": "о"
+      },
+      "shiftText": {
+        "en": "J",
+        "ru": "О"
       },
       "code": "KeyJ"
     },
@@ -213,12 +412,20 @@
         "en": "k",
         "ru": "л"
       },
+      "shiftText": {
+        "en": "K",
+        "ru": "Л"
+      },
       "code": "KeyK"
     },
     {
       "text": {
         "en": "l",
         "ru": "д"
+      },
+      "shiftText": {
+        "en": "L",
+        "ru": "Д"
       },
       "code": "KeyL"
     },
@@ -227,6 +434,10 @@
         "en": ";",
         "ru": "ж"
       },
+      "shiftText": {
+        "en": ":",
+        "ru": "Ж"
+      },
       "code": "Semicolon"
     },
     {
@@ -234,20 +445,42 @@
         "en": "'",
         "ru": "э"
       },
+      "shiftText": {
+        "en": "\"",
+        "ru": "Э"
+      },
       "code": "Quote"
     },
     {
-      "text": "Enter",
+      "text": {
+        "en": "Enter",
+        "ru": "Enter"
+      },
+      "shiftText": {
+        "en": "Enter",
+        "ru": "Enter"
+      },
       "code": "Enter"
     },
     {
-      "text": "Shift",
+      "text": {
+        "en": "Shift",
+        "ru": "Shift"
+      },
+      "shiftText": {
+        "en": "Shift",
+        "ru": "Shift"
+      },
       "code": "ShiftLeft"
     },
     {
       "text": {
         "en": "z",
         "ru": "я"
+      },
+      "shiftText": {
+        "en": "Z",
+        "ru": "Я"
       },
       "code": "KeyZ"
     },
@@ -256,12 +489,20 @@
         "en": "x",
         "ru": "ч"
       },
+      "shiftText": {
+        "en": "X",
+        "ru": "Ч"
+      },
       "code": "KeyX"
     },
     {
       "text": {
         "en": "c",
         "ru": "с"
+      },
+      "shiftText": {
+        "en": "C",
+        "ru": "С"
       },
       "code": "KeyC"
     },
@@ -270,12 +511,20 @@
         "en": "v",
         "ru": "м"
       },
+      "shiftText": {
+        "en": "V",
+        "ru": "М"
+      },
       "code": "KeyV"
     },
     {
       "text": {
         "en": "b",
         "ru": "и"
+      },
+      "shiftText": {
+        "en": "B",
+        "ru": "И"
       },
       "code": "KeyB"
     },
@@ -284,12 +533,20 @@
         "en": "n",
         "ru": "т"
       },
+      "shiftText": {
+        "en": "N",
+        "ru": "Т"
+      },
       "code": "KeyN"
     },
     {
       "text": {
         "en": "m",
         "ru": "ь"
+      },
+      "shiftText": {
+        "en": "M",
+        "ru": "Ь"
       },
       "code": "KeyM"
     },
@@ -298,12 +555,20 @@
         "en": ",",
         "ru": "б"
       },
+      "shiftText": {
+        "en": "<",
+        "ru": "Б"
+      },
       "code": "Comma"
     },
     {
       "text": {
         "en": ".",
         "ru": "ю"
+      },
+      "shiftText": {
+        "en": ">",
+        "ru": "Ю"
       },
       "code": "Period"
     },
@@ -312,50 +577,131 @@
         "en": "/",
         "ru": "."
       },
+      "shiftText": {
+        "en": "?",
+        "ru": ","
+      },
       "code": "Slash"
     },
     {
-      "text": "▲",
+      "text": {
+        "en": "▲",
+        "ru": "▲"
+      },
+      "shiftText": {
+        "en": "▲",
+        "ru": "▲"
+      },
       "code": "ArrowUp"
     },
     {
-      "text": "Shift",
+      "text": {
+        "en": "Shift",
+        "ru": "Shift"
+      },
+      "shiftText": {
+        "en": "Shift",
+        "ru": "Shift"
+      },
       "code": "ShiftRight"
     },
     {
-      "text": "Ctrl",
+      "text": {
+        "en": "Ctrl",
+        "ru": "Ctrl"
+      },
+      "shiftText": {
+        "en": "Ctrl",
+        "ru": "Ctrl"
+      },
       "code": "ControlLeft"
     },
     {
-      "text": "Win",
+      "text": {
+        "en": "Win",
+        "ru": "Win"
+      },
+      "shiftText": {
+        "en": "Win",
+        "ru": "Win"
+      },
       "code": "MetaLeft"
     },
     {
-      "text": "Alt",
+      "text": {
+        "en": "Alt",
+        "ru": "Alt"
+      },
+      "shiftText": {
+        "en": "Alt",
+        "ru": "Alt"
+      },
       "code": "AltLeft"
     },
     {
-      "text": "",
+      "text": {
+        "en": "",
+        "ru": ""
+      },
+      "shiftText": {
+        "en": "",
+        "ru": ""
+      },
       "code": "Space"
     },
     {
-      "text": "Alt",
+      "text": {
+        "en": "Alt",
+        "ru": "Alt"
+      },
+      "shiftText": {
+        "en": "Alt",
+        "ru": "Alt"
+      },
       "code": "AltRight"
     },
     {
-      "text": "◄",
+      "text": {
+        "en": "◄",
+        "ru": "◄"
+      },
+      "shiftText": {
+        "en": "◄",
+        "ru": "◄"
+      },
       "code": "ArrowLeft"
     },
     {
-      "text": "▼",
+      "text": {
+        "en": "▼",
+        "ru": "▼"
+      },
+      "shiftText": {
+        "en": "▼",
+        "ru": "▼"
+      },
       "code": "ArrowDown"
     },
     {
-      "text": "►",
+      "text": {
+        "en": "►",
+        "ru": "►"
+      },
+      "shiftText": {
+        "en": "►",
+        "ru": "►"
+      },
       "code": "ArrowRight"
     },
     {
-      "text": "Ctrl",
+      "text": {
+        "en": "Ctrl",
+        "ru": "Ctrl"
+      },
+      "shiftText": {
+        "en": "Ctrl",
+        "ru": "Ctrl"
+      },
       "code": "ControlRight"
     }
   ]
