@@ -4,6 +4,7 @@ const LANG = {
 };
 
 let currentLang = LANG.EN;
+let isShiftPressed = false;
 let isCapsLockPressed = false;
 
 const KEYBOARD_KEY_DATASET = {
@@ -13,6 +14,26 @@ const KEYBOARD_KEY_DATASET = {
   'SHIFT_TEXT_EN': 'shiftTextEn',
   'SHIFT_TEXT_RU': 'shiftTextRu',
 }
+
+const KEYBOARD_KEY_CODE = {
+  'BACKSPACE': 'Backspace',
+  'TAB': 'Tab',
+  'DELETE': 'Delete',
+  'CAPSLOCK': 'CapsLock',
+  'ENTER': 'Enter',
+  'SHIFT_LEFT': 'ShiftLeft',
+  'SHIFT_RIGHT': 'ShiftRight',
+  'CONTROL_LEFT': 'ControlLeft',
+  'CONTROL_RIGHT': 'ControlRight',
+  'WIN': 'MetaLeft',
+  'ALT_LEFT': 'AltLeft',
+  'ALT_RIGHT': 'AltRight',
+  'ARROW_UP': 'ArrowUp',
+  'ARROW_LEFT': 'ArrowLeft',
+  'ARROW_DOWN': 'ArrowDown',
+  'ARROW_RIGHT': 'ArrowRight',
+  'SPACE': 'Space',
+};
 
 init();
 
@@ -31,6 +52,8 @@ async function init() {
 
     document.addEventListener('keydown', handleKeyDown);
     document.addEventListener('keyup', handleKeyUp);
+
+    setCursorPosition();
   } catch(err) {
     console.log(err);
   }
@@ -74,6 +97,8 @@ function createKeyboardKeys(keys) {
     keyboardKeys.append(createKeyboardKey(key));
   });
 
+  keyboardKeys.addEventListener('click', handleKeyClick);
+
   return keyboardKeys;
 }
 
@@ -90,6 +115,19 @@ function createKeyboardKey(key) {
 
   if (code === 'Space') {
     keyboardKey.classList.add('keyboard__key--space');
+  }
+
+  if (code === KEYBOARD_KEY_CODE.SHIFT_LEFT || code === KEYBOARD_KEY_CODE.SHIFT_RIGHT) {
+    keyboardKey.addEventListener('mousedown', () => {
+      isShiftPressed = true;
+      updateKeyboardKeyTexts(isShiftPressed, isCapsLockPressed);
+
+    });
+
+    keyboardKey.addEventListener('mouseup', () => {
+      isShiftPressed = false;
+      updateKeyboardKeyTexts(isShiftPressed, isCapsLockPressed);
+    });
   }
 
   keyboardKey.dataset[KEYBOARD_KEY_DATASET.CODE] = code;
@@ -116,7 +154,8 @@ function handleKeyDown(event) {
 
   setActiveKeyboardKey(keyboardKey);
 
-  updateKeyboardKeyTexts(event.shiftKey, isCapsLockPressed);
+  isShiftPressed = event.shiftKey;
+  updateKeyboardKeyTexts(isShiftPressed, isCapsLockPressed);
 }
 
 function toggleLang() {
@@ -156,7 +195,8 @@ function handleKeyUp(event) {
   }
 
   setInactiveKeyboardKey(keyboardKey);
-  updateKeyboardKeyTexts(event.shiftKey, isCapsLockPressed);
+  isShiftPressed = event.shiftKey;
+  updateKeyboardKeyTexts(isShiftPressed, isCapsLockPressed);
 }
 
 function setInactiveKeyboardKey(keyboardKey) {
@@ -181,3 +221,91 @@ function createDisplay() {
 
   return displayWrapper;
 }
+
+function handleKeyClick(event) {
+  const keyboardKey = event.target;
+  const isKeyboardKey = keyboardKey.classList.contains('keyboard__key');
+
+  if (isKeyboardKey) {
+    const textarea = document.querySelector('.display__textarea');
+    const textareaStartPosition = textarea.selectionStart;
+    const textareaEndPosition = textarea.selectionEnd;
+
+    const code = keyboardKey.dataset[KEYBOARD_KEY_DATASET.CODE];
+    let value = keyboardKey.textContent;
+
+    if (!Object.values(KEYBOARD_KEY_CODE).includes(code)) {
+      textarea.value = addSymbol(textarea.value, value, textareaStartPosition, textareaEndPosition);
+      setCursorPosition(textareaStartPosition + 1);
+    } else {
+      switch (code) {
+        case KEYBOARD_KEY_CODE.BACKSPACE:
+          const newTextareaStartPosition = textareaStartPosition === textareaEndPosition ? textareaStartPosition - 1 : textareaStartPosition;
+          textarea.value = removeSymbol(textarea.value, newTextareaStartPosition, textareaEndPosition);
+          setCursorPosition(newTextareaStartPosition);
+          break;
+        case KEYBOARD_KEY_CODE.TAB:
+          textarea.value = addSymbol(textarea.value, '\t', textareaStartPosition, textareaEndPosition);
+          setCursorPosition(textareaStartPosition + 1);
+          break;
+        case KEYBOARD_KEY_CODE.DELETE:
+          const newTextareaEndPosition = textareaStartPosition === textareaEndPosition ? textareaEndPosition + 1 : textareaEndPosition;
+          textarea.value = removeSymbol(textarea.value, textareaStartPosition, newTextareaEndPosition);
+          setCursorPosition(textareaStartPosition);
+          break;
+        case KEYBOARD_KEY_CODE.ENTER:
+          textarea.value = addSymbol(textarea.value, '\n', textareaStartPosition, textareaEndPosition);
+          setCursorPosition(textareaStartPosition + 1);
+          break;
+        case KEYBOARD_KEY_CODE.CAPSLOCK:
+          isCapsLockPressed = !isCapsLockPressed;
+          updateKeyboardKeyTexts(isShiftPressed, isCapsLockPressed);
+          break;
+        case KEYBOARD_KEY_CODE.SPACE:
+          textarea.value = addSymbol(textarea.value, ' ', textareaStartPosition, textareaEndPosition);
+          setCursorPosition(textareaStartPosition + 1);
+          break;
+        case KEYBOARD_KEY_CODE.ARROW_LEFT:
+          setCursorPosition(textareaStartPosition - 1);
+          break;
+        case KEYBOARD_KEY_CODE.ARROW_RIGHT:
+          setCursorPosition(textareaStartPosition + 1);
+          break;
+        case KEYBOARD_KEY_CODE.ARROW_UP:
+          const enterLastPosition = textarea.value.lastIndexOf('\n', textareaStartPosition - 1);
+          setCursorPosition(enterLastPosition !== - 1 ? enterLastPosition : 0);
+          break;
+        case KEYBOARD_KEY_CODE.ARROW_DOWN:
+          const enterFirstPosition = textarea.value.indexOf('\n', textareaEndPosition + 1);
+          setCursorPosition(enterFirstPosition !== - 1 ? enterFirstPosition + 1 : textarea.value.length);
+          break;
+        default:
+          setCursorPosition();
+      }
+    }
+  }
+}
+
+function addSymbol(str, symbol, start, end) {
+  return str.slice(0, start) + symbol + str.slice(end);
+}
+
+function removeSymbol(str, start, end) {
+  return str.slice(0, start) + str.slice(end);
+}
+
+function setCursorPosition(position) {
+  const textarea = document.querySelector('.display__textarea');
+
+  const end = textarea.value.length;
+  position = position !== undefined ? position : end;
+  position = position < 0 ? 0 : position;
+
+  textarea.setSelectionRange(position, position);
+  textarea.focus();
+}
+
+function removeSymbolOnRight(str, position) {
+  return str.slice(0, position) + str.slice(position + 1);
+}
+
