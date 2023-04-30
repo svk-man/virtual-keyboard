@@ -4,6 +4,7 @@ const LANG = {
 };
 
 let currentLang = LANG.EN;
+let isCapsLockPressed = false;
 
 const KEYBOARD_KEY_DATASET = {
   'CODE': 'code',
@@ -106,22 +107,26 @@ function handleKeyDown(event) {
     toggleLang();
   }
 
-  changeKeyboardKeyLangTexts(event.shiftKey);
+  updateKeyboardKeyTexts(event.shiftKey, isCapsLockPressed);
 }
 
 function toggleLang() {
   currentLang = currentLang === LANG.EN ? LANG.RU : LANG.EN;
 }
 
-function changeKeyboardKeyLangTexts(isShiftPressed) {
+function updateKeyboardKeyTexts(isShiftPressed, isCapsLockPressed) {
   const keyboardKeys = document.querySelectorAll(`[data-code]`);
 
   keyboardKeys.forEach(keyboardKey => {
     const textEn = isShiftPressed ? keyboardKey.dataset[KEYBOARD_KEY_DATASET.SHIFT_TEXT_EN] : keyboardKey.dataset[KEYBOARD_KEY_DATASET.TEXT_EN];
     const textRu = isShiftPressed ? keyboardKey.dataset[KEYBOARD_KEY_DATASET.SHIFT_TEXT_RU] : keyboardKey.dataset[KEYBOARD_KEY_DATASET.TEXT_RU];
-    if (textEn && textRu) {
-      keyboardKey.textContent = currentLang === LANG.EN ? textEn : textRu;
+
+    let text = currentLang === LANG.EN ? textEn : textRu;
+    if (isCapsLockPressed && isLetter(text)) {
+      text = isShiftPressed ? text.toLowerCase() : text.toUpperCase();
     }
+
+    keyboardKey.textContent = text;
   });
 }
 
@@ -133,10 +138,18 @@ function handleKeyUp(event) {
   const keyCode = event.code;
   const keyboardKey = document.querySelector(`[data-code="${keyCode}"`);
 
+  if (keyCode === 'CapsLock') {
+    isCapsLockPressed = !isCapsLockPressed;
+  }
+
   setInactiveKeyboardKey(keyboardKey);
-  changeKeyboardKeyLangTexts(event.shiftKey);
+  updateKeyboardKeyTexts(event.shiftKey, isCapsLockPressed);
 }
 
 function setInactiveKeyboardKey(keyboardKey) {
   keyboardKey.classList.remove('keyboard__key--active');
+}
+
+function isLetter(str) {
+  return str.length === 1 && str.match(/[a-zA-Zа-яА-Я]/i);
 }
