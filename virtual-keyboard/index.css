@@ -1,0 +1,97 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wrapper {
+  max-width: 900px;
+  padding: 0 20px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.display,
+.keyboard {
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #2B2B2D;
+}
+
+.display {
+  padding-bottom: 50px;
+  background: #2B2B2D url("rs-school-js.svg") no-repeat center bottom 12px;
+  background-size: 80px;
+}
+
+.display__textarea {
+  width: 100%;
+  padding: 10px;
+  border: 0;
+  resize: none;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.display__textarea:focus-visible {
+  outline: none;
+}
+
+.keyboard {
+  margin-top: 10px;
+}
+
+.keyboard__keys {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+.keyboard__key {
+  min-width: 50px;
+  padding: 14px;
+  border: 3px solid #646464;
+  border-radius: 9px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  color: white;
+  background-color: #646464;
+  outline: none;
+  transition: .2s;
+}
+
+.keyboard__key:hover {
+  cursor: pointer;
+  border-color: white;
+}
+
+.keyboard__key--active {
+  background-color: #0F77F0;
+  border-color: #0F77F0;
+}
+
+.keyboard__key--large {
+  min-width: 115px;
+}
+
+.keyboard__key--space {
+  flex: 1;
+}
+
+.title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+}
+
+.paragraph {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+}
