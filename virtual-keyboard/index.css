@@ -64,6 +64,7 @@ body {
   color: white;
   background-color: #646464;
   outline: none;
+  transition: .2s;
 }
 
 .keyboard__key:hover {
