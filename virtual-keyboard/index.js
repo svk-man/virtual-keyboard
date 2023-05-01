@@ -36,6 +36,8 @@ const KEYBOARD_KEY_CODE = {
   'SPACE': 'Space',
 };
 
+let prevKeyboardKey = null;
+
 init();
 
 async function init() {
@@ -98,7 +100,8 @@ function createKeyboardKeys(keys) {
     keyboardKeys.append(createKeyboardKey(key));
   });
 
-  keyboardKeys.addEventListener('click', handleKeyClick);
+  keyboardKeys.addEventListener('mousedown', handleMouseDown);
+  keyboardKeys.addEventListener('mouseup', handleMouseUp);
 
   return keyboardKeys;
 }
@@ -229,14 +232,23 @@ function createDisplay() {
   return displayWrapper;
 }
 
-function handleKeyClick(event) {
+function handleMouseDown(event) {
   const keyboardKey = event.target;
   const isKeyboardKey = keyboardKey.classList.contains('keyboard__key');
+  prevKeyboardKey = keyboardKey;
 
   if (isKeyboardKey) {
     handleKeyboardKey(keyboardKey);
+    setActiveKeyboardKey(keyboardKey);
   }
 }
+
+function handleMouseUp() {
+  if (prevKeyboardKey) {
+    setInactiveKeyboardKey(prevKeyboardKey);
+  }
+}
+
 
 function handleKeyboardKey(keyboardKey) {
   const textarea = document.querySelector('.display__textarea');
