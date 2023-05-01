@@ -38,6 +38,8 @@ const KEYBOARD_KEY_CODE = {
 
 let prevKeyboardKey = null;
 
+let textarea = null;
+
 init();
 
 async function init() {
@@ -55,6 +57,8 @@ async function init() {
 
     document.addEventListener('keydown', handleKeyDown);
     document.addEventListener('keyup', handleKeyUp);
+
+    textarea = document.querySelector('.display__textarea');
 
     setCursorPosition();
   } catch(err) {
@@ -102,6 +106,7 @@ function createKeyboardKeys(keys) {
 
   keyboardKeys.addEventListener('mousedown', handleMouseDown);
   keyboardKeys.addEventListener('mouseup', handleMouseUp);
+  keyboardKeys.addEventListener('click', handleClick);
 
   return keyboardKeys;
 }
@@ -207,6 +212,14 @@ function handleKeyUp(event) {
   isShiftPressed = event.shiftKey;
   isAltPressed = event.altKey;
   updateKeyboardKeyTexts(isShiftPressed, isCapsLockPressed);
+
+  if (keyCode === KEYBOARD_KEY_CODE.CAPSLOCK) {
+    if (isCapsLockPressed) {
+      setActiveKeyboardKey(keyboardKey);
+    } else {
+      setInactiveKeyboardKey(keyboardKey);
+    }
+  }
 }
 
 function setInactiveKeyboardKey(keyboardKey) {
@@ -240,18 +253,35 @@ function handleMouseDown(event) {
   if (isKeyboardKey) {
     handleKeyboardKey(keyboardKey);
     setActiveKeyboardKey(keyboardKey);
+    updateKeyboardKeyTexts(isShiftPressed, isCapsLockPressed);
   }
 }
 
 function handleMouseUp() {
   if (prevKeyboardKey) {
+    const keyCode = prevKeyboardKey.dataset[KEYBOARD_KEY_DATASET.CODE];
+
     setInactiveKeyboardKey(prevKeyboardKey);
+    if (keyCode === KEYBOARD_KEY_CODE.CAPSLOCK) {
+      if (isCapsLockPressed) {
+        setActiveKeyboardKey(prevKeyboardKey);
+      } else {
+        setInactiveKeyboardKey(prevKeyboardKey);
+      }
+    }
   }
 }
 
+function handleClick(event) {
+  const keyboardKey = event.target;
+  const isKeyboardKey = keyboardKey.classList.contains('keyboard__key');
+
+  if (isKeyboardKey) {
+    textarea.focus();
+  }
+}
 
 function handleKeyboardKey(keyboardKey) {
-  const textarea = document.querySelector('.display__textarea');
   const textareaStartPosition = textarea.selectionStart;
   const textareaEndPosition = textarea.selectionEnd;
 
@@ -330,8 +360,6 @@ function removeSymbol(str, start, end) {
 }
 
 function setCursorPosition(position) {
-  const textarea = document.querySelector('.display__textarea');
-
   const end = textarea.value.length;
   position = position !== undefined ? position : end;
   position = position < 0 ? 0 : position;

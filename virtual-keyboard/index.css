@@ -63,6 +63,7 @@ body {
   font-weight: 700;
   color: white;
   background-color: #646464;
+  outline: none;
 }
 
 .keyboard__key:hover {
