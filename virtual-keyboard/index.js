@@ -5,9 +5,12 @@ const LANG = {
 };
 
 let currentLang = localStorage.getItem('lang') || LANG.EN;
-let isShiftPressed = false;
+let isLeftShiftPressed = false;
+let isRightShiftPressed = false;
+let isLeftAltPressed = false;
+let isRightAltPressed = false;
 let isCapsLockPressed = false;
-let isAltPressed = false;
+let isCapsLockActive = false;
 
 const KEYBOARD_KEY_DATASET = {
   CODE: 'code',
@@ -133,29 +136,32 @@ function createKeyboardKey(key) {
   if (code === 'Space') {
     keyboardKey.classList.add('keyboard__key--space');
   }
-
-  if (code === KEYBOARD_KEY_CODE.SHIFT_LEFT || code === KEYBOARD_KEY_CODE.SHIFT_RIGHT) {
+/*
+  if (code === KEYBOARD_KEY_CODE.SHIFT_LEFT) {
     keyboardKey.addEventListener('mousedown', () => {
-      isShiftPressed = true;
-      updateKeyboardKeyTexts(isShiftPressed, isCapsLockPressed);
-    });
-
-    keyboardKey.addEventListener('mouseup', () => {
-      isShiftPressed = false;
-      updateKeyboardKeyTexts(isShiftPressed, isCapsLockPressed);
+      isLeftShiftPressed = true;
+      updateKeyboardKeyTexts(isLeftShiftPressed, isCapsLockPressed);
     });
   }
 
-  if (code === KEYBOARD_KEY_CODE.ALT_LEFT || code === KEYBOARD_KEY_CODE.ALT_RIGHT) {
+	if (code === KEYBOARD_KEY_CODE.SHIFT_RIGHT) {
     keyboardKey.addEventListener('mousedown', () => {
-      isAltPressed = true;
-    });
-
-    keyboardKey.addEventListener('mouseup', () => {
-      isAltPressed = false;
+      isRightShiftPressed = true;
     });
   }
 
+  if (code === KEYBOARD_KEY_CODE.ALT_LEFT) {
+    keyboardKey.addEventListener('mousedown', () => {
+      isLeftAltPressed = true;
+    });
+  }
+
+	if (code === KEYBOARD_KEY_CODE.ALT_RIGHT) {
+    keyboardKey.addEventListener('mousedown', () => {
+      isRightAltPressed = true;
+    });
+  }
+*/
   keyboardKey.dataset[KEYBOARD_KEY_DATASET.CODE] = code;
 
   if (typeof langText === 'object') {
@@ -180,9 +186,10 @@ function handleKeyDown(event) {
 
   setActiveKeyboardKey(keyboardKey);
 
-  isShiftPressed = event.shiftKey;
-  isAltPressed = event.altKey;
-  updateKeyboardKeyTexts(isShiftPressed, isCapsLockPressed);
+  isLeftShiftPressed = keyCode === KEYBOARD_KEY_CODE.SHIFT_LEFT;
+	if (isLeftShiftPressed) {
+		updateKeyboardKeyTexts(isLeftShiftPressed);
+	}
 }
 
 function toggleLang() {
@@ -190,18 +197,18 @@ function toggleLang() {
   localStorage.setItem('lang', currentLang);
 }
 
-function updateKeyboardKeyTexts() {
+function updateKeyboardKeyTexts(isLeftShiftPressed) {
   const keyboardKeys = document.querySelectorAll('[data-code]');
 
   keyboardKeys.forEach((keyboardKey) => {
-    const textEn = isShiftPressed ? keyboardKey.dataset[KEYBOARD_KEY_DATASET.SHIFT_TEXT_EN]
+    const textEn = isLeftShiftPressed ? keyboardKey.dataset[KEYBOARD_KEY_DATASET.SHIFT_TEXT_EN]
       : keyboardKey.dataset[KEYBOARD_KEY_DATASET.TEXT_EN];
-    const textRu = isShiftPressed ? keyboardKey.dataset[KEYBOARD_KEY_DATASET.SHIFT_TEXT_RU]
+    const textRu = isLeftShiftPressed ? keyboardKey.dataset[KEYBOARD_KEY_DATASET.SHIFT_TEXT_RU]
       : keyboardKey.dataset[KEYBOARD_KEY_DATASET.TEXT_RU];
 
     let text = currentLang === LANG.EN ? textEn : textRu;
-    if (isCapsLockPressed && isLetter(text)) {
-      text = isShiftPressed ? text.toLowerCase() : text.toUpperCase();
+    if (isCapsLockActive && isLetter(text)) {
+      text = isLeftShiftPressed ? text.toLowerCase() : text.toUpperCase();
     }
 
     // eslint-disable-next-line no-param-reassign
@@ -217,16 +224,22 @@ function handleKeyUp(event) {
   const keyCode = event.code;
   const keyboardKey = document.querySelector(`[data-code="${keyCode}"`);
 
-  handleKeyboardKey(keyboardKey);
+  handleKeyboardInputKey(keyboardKey);
 
   setInactiveKeyboardKey(keyboardKey);
 
-  isShiftPressed = event.shiftKey;
-  isAltPressed = event.altKey;
-  updateKeyboardKeyTexts(isShiftPressed, isCapsLockPressed);
+  isLeftShiftPressed = keyCode === KEYBOARD_KEY_CODE.SHIFT_LEFT;
+	if (isLeftShiftPressed) {
+		updateKeyboardKeyTexts(false);
+	}
 
-  if (keyCode === KEYBOARD_KEY_CODE.CAPSLOCK) {
-    if (isCapsLockPressed) {
+	isCapsLockPressed = keyCode === KEYBOARD_KEY_CODE.CAPSLOCK;
+	if (isCapsLockPressed) {
+		updateKeyboardKeyTexts(isLeftShiftPressed);
+	}
+
+  if (isCapsLockPressed) {
+    if (isCapsLockActive) {
       setActiveKeyboardKey(keyboardKey);
     } else {
       setInactiveKeyboardKey(keyboardKey);
@@ -263,9 +276,12 @@ function handleMouseDown(event) {
   prevKeyboardKey = keyboardKey;
 
   if (isKeyboardKey) {
-    handleKeyboardKey(keyboardKey);
+    handleKeyboardInputKey(keyboardKey);
     setActiveKeyboardKey(keyboardKey);
-    updateKeyboardKeyTexts(isShiftPressed, isCapsLockPressed);
+		isLeftShiftPressed = event.code === KEYBOARD_KEY_CODE.SHIFT_LEFT;
+		if (isLeftShiftPressed) {
+			updateKeyboardKeyTexts(isLeftShiftPressed, isCapsLockPressed);
+		}
   }
 }
 
@@ -293,7 +309,7 @@ function handleClick(event) {
   }
 }
 
-function handleKeyboardKey(keyboardKey) {
+function handleKeyboardInputKey(keyboardKey) {
   const start = textarea.selectionStart;
   const end = textarea.selectionEnd;
 
@@ -324,7 +340,7 @@ function handleKeyboardKey(keyboardKey) {
         setCursorPosition(start + 1);
         break;
       case KEYBOARD_KEY_CODE.CAPSLOCK:
-        isCapsLockPressed = !isCapsLockPressed;
+        isCapsLockActive = !isCapsLockActive;
         break;
       case KEYBOARD_KEY_CODE.SPACE:
         textarea.value = addSymbol(textarea.value, ' ', start, end);
@@ -345,22 +361,35 @@ function handleKeyboardKey(keyboardKey) {
         const position = enterFirstPosition !== -1 ? enterFirstPosition + 1 : textarea.value.length;
         setCursorPosition(position);
         break;
-      case KEYBOARD_KEY_CODE.SHIFT_LEFT:
+      /*case KEYBOARD_KEY_CODE.SHIFT_LEFT:
+				isLeftShiftPressed = true;
+        break;
       case KEYBOARD_KEY_CODE.SHIFT_RIGHT:
-        isShiftPressed = true;
+        isRightShiftPressed = true;
         break;
       case KEYBOARD_KEY_CODE.ALT_LEFT:
-      case KEYBOARD_KEY_CODE.ALT_RIGHT:
-        isAltPressed = true;
+				isLeftAltPressed = true;
         break;
+      case KEYBOARD_KEY_CODE.ALT_RIGHT:
+        isRightAltPressed = true;
+        break;*/
       default:
-        setCursorPosition();
+        break;
     }
+  }
+}
 
-    if (isShiftPressed && isAltPressed) {
-      toggleLang();
-      updateKeyboardKeyTexts(isShiftPressed, isCapsLockPressed);
-    }
+function handleKeyboardManageKey(keyboardKey) {
+	const keyCode = keyboardKey.dataset[KEYBOARD_KEY_DATASET.CODE];
+
+	isLeftShiftPressed = !(keyCode === KEYBOARD_KEY_CODE.SHIFT_LEFT);
+	if (!isLeftShiftPressed) {
+		updateKeyboardKeyTexts(isLeftShiftPressed, isCapsLockActive);
+	}
+
+	if (isLeftShiftPressed && isLeftAltPressed) {
+    toggleLang();
+    updateKeyboardKeyTexts(isLeftShiftPressed, isCapsLockActive);
   }
 }
 
