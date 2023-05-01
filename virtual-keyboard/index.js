@@ -3,7 +3,7 @@ const LANG = {
   'RU': 'ru',
 };
 
-let currentLang = LANG.EN;
+let currentLang = localStorage.getItem('lang') || LANG.EN;
 let isShiftPressed = false;
 let isCapsLockPressed = false;
 let isAltPressed = false;
@@ -179,6 +179,7 @@ function handleKeyDown(event) {
 
 function toggleLang() {
   currentLang = currentLang === LANG.EN ? LANG.RU : LANG.EN;
+  localStorage.setItem('lang', currentLang);
 }
 
 function updateKeyboardKeyTexts(isShiftPressed, isCapsLockPressed) {
