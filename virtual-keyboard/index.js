@@ -6,6 +6,7 @@ const LANG = {
 let currentLang = LANG.EN;
 let isShiftPressed = false;
 let isCapsLockPressed = false;
+let isAltPressed = false;
 
 const KEYBOARD_KEY_DATASET = {
   'CODE': 'code',
@@ -121,12 +122,21 @@ function createKeyboardKey(key) {
     keyboardKey.addEventListener('mousedown', () => {
       isShiftPressed = true;
       updateKeyboardKeyTexts(isShiftPressed, isCapsLockPressed);
-
     });
 
     keyboardKey.addEventListener('mouseup', () => {
       isShiftPressed = false;
       updateKeyboardKeyTexts(isShiftPressed, isCapsLockPressed);
+    });
+  }
+
+  if (code === KEYBOARD_KEY_CODE.ALT_LEFT || code === KEYBOARD_KEY_CODE.ALT_RIGHT) {
+    keyboardKey.addEventListener('mousedown', () => {
+      isAltPressed = true;
+    });
+
+    keyboardKey.addEventListener('mouseup', () => {
+      isAltPressed = false;
     });
   }
 
@@ -155,6 +165,7 @@ function handleKeyDown(event) {
   setActiveKeyboardKey(keyboardKey);
 
   isShiftPressed = event.shiftKey;
+  isAltPressed = event.altKey;
   updateKeyboardKeyTexts(isShiftPressed, isCapsLockPressed);
 }
 
@@ -186,16 +197,12 @@ function handleKeyUp(event) {
   const keyCode = event.code;
   const keyboardKey = document.querySelector(`[data-code="${keyCode}"`);
 
-  if (keyCode === 'CapsLock') {
-    isCapsLockPressed = !isCapsLockPressed;
-  }
-
-  if (event.shiftKey && event.altKey) {
-    toggleLang();
-  }
+  handleKeyboardKey(keyboardKey);
 
   setInactiveKeyboardKey(keyboardKey);
+
   isShiftPressed = event.shiftKey;
+  isAltPressed = event.altKey;
   updateKeyboardKeyTexts(isShiftPressed, isCapsLockPressed);
 }
 
@@ -227,61 +234,77 @@ function handleKeyClick(event) {
   const isKeyboardKey = keyboardKey.classList.contains('keyboard__key');
 
   if (isKeyboardKey) {
-    const textarea = document.querySelector('.display__textarea');
-    const textareaStartPosition = textarea.selectionStart;
-    const textareaEndPosition = textarea.selectionEnd;
+    handleKeyboardKey(keyboardKey);
+  }
+}
 
-    const code = keyboardKey.dataset[KEYBOARD_KEY_DATASET.CODE];
-    let value = keyboardKey.textContent;
+function handleKeyboardKey(keyboardKey) {
+  const textarea = document.querySelector('.display__textarea');
+  const textareaStartPosition = textarea.selectionStart;
+  const textareaEndPosition = textarea.selectionEnd;
 
-    if (!Object.values(KEYBOARD_KEY_CODE).includes(code)) {
-      textarea.value = addSymbol(textarea.value, value, textareaStartPosition, textareaEndPosition);
-      setCursorPosition(textareaStartPosition + 1);
-    } else {
-      switch (code) {
-        case KEYBOARD_KEY_CODE.BACKSPACE:
-          const newTextareaStartPosition = textareaStartPosition === textareaEndPosition ? textareaStartPosition - 1 : textareaStartPosition;
-          textarea.value = removeSymbol(textarea.value, newTextareaStartPosition, textareaEndPosition);
-          setCursorPosition(newTextareaStartPosition);
-          break;
-        case KEYBOARD_KEY_CODE.TAB:
-          textarea.value = addSymbol(textarea.value, '\t', textareaStartPosition, textareaEndPosition);
-          setCursorPosition(textareaStartPosition + 1);
-          break;
-        case KEYBOARD_KEY_CODE.DELETE:
-          const newTextareaEndPosition = textareaStartPosition === textareaEndPosition ? textareaEndPosition + 1 : textareaEndPosition;
-          textarea.value = removeSymbol(textarea.value, textareaStartPosition, newTextareaEndPosition);
-          setCursorPosition(textareaStartPosition);
-          break;
-        case KEYBOARD_KEY_CODE.ENTER:
-          textarea.value = addSymbol(textarea.value, '\n', textareaStartPosition, textareaEndPosition);
-          setCursorPosition(textareaStartPosition + 1);
-          break;
-        case KEYBOARD_KEY_CODE.CAPSLOCK:
-          isCapsLockPressed = !isCapsLockPressed;
-          updateKeyboardKeyTexts(isShiftPressed, isCapsLockPressed);
-          break;
-        case KEYBOARD_KEY_CODE.SPACE:
-          textarea.value = addSymbol(textarea.value, ' ', textareaStartPosition, textareaEndPosition);
-          setCursorPosition(textareaStartPosition + 1);
-          break;
-        case KEYBOARD_KEY_CODE.ARROW_LEFT:
-          setCursorPosition(textareaStartPosition - 1);
-          break;
-        case KEYBOARD_KEY_CODE.ARROW_RIGHT:
-          setCursorPosition(textareaStartPosition + 1);
-          break;
-        case KEYBOARD_KEY_CODE.ARROW_UP:
-          const enterLastPosition = textarea.value.lastIndexOf('\n', textareaStartPosition - 1);
-          setCursorPosition(enterLastPosition !== - 1 ? enterLastPosition : 0);
-          break;
-        case KEYBOARD_KEY_CODE.ARROW_DOWN:
-          const enterFirstPosition = textarea.value.indexOf('\n', textareaEndPosition + 1);
-          setCursorPosition(enterFirstPosition !== - 1 ? enterFirstPosition + 1 : textarea.value.length);
-          break;
-        default:
-          setCursorPosition();
-      }
+  const code = keyboardKey.dataset[KEYBOARD_KEY_DATASET.CODE];
+  let value = keyboardKey.textContent;
+
+  if (!Object.values(KEYBOARD_KEY_CODE).includes(code)) {
+    textarea.value = addSymbol(textarea.value, value, textareaStartPosition, textareaEndPosition);
+    setCursorPosition(textareaStartPosition + 1);
+  } else {
+    switch (code) {
+      case KEYBOARD_KEY_CODE.BACKSPACE:
+        const newTextareaStartPosition = textareaStartPosition === textareaEndPosition ? textareaStartPosition - 1 : textareaStartPosition;
+        textarea.value = removeSymbol(textarea.value, newTextareaStartPosition, textareaEndPosition);
+        setCursorPosition(newTextareaStartPosition);
+        break;
+      case KEYBOARD_KEY_CODE.TAB:
+        textarea.value = addSymbol(textarea.value, '\t', textareaStartPosition, textareaEndPosition);
+        setCursorPosition(textareaStartPosition + 1);
+        break;
+      case KEYBOARD_KEY_CODE.DELETE:
+        const newTextareaEndPosition = textareaStartPosition === textareaEndPosition ? textareaEndPosition + 1 : textareaEndPosition;
+        textarea.value = removeSymbol(textarea.value, textareaStartPosition, newTextareaEndPosition);
+        setCursorPosition(textareaStartPosition);
+        break;
+      case KEYBOARD_KEY_CODE.ENTER:
+        textarea.value = addSymbol(textarea.value, '\n', textareaStartPosition, textareaEndPosition);
+        setCursorPosition(textareaStartPosition + 1);
+        break;
+      case KEYBOARD_KEY_CODE.CAPSLOCK:
+        isCapsLockPressed = !isCapsLockPressed;
+        break;
+      case KEYBOARD_KEY_CODE.SPACE:
+        textarea.value = addSymbol(textarea.value, ' ', textareaStartPosition, textareaEndPosition);
+        setCursorPosition(textareaStartPosition + 1);
+        break;
+      case KEYBOARD_KEY_CODE.ARROW_LEFT:
+        setCursorPosition(textareaStartPosition - 1);
+        break;
+      case KEYBOARD_KEY_CODE.ARROW_RIGHT:
+        setCursorPosition(textareaStartPosition + 1);
+        break;
+      case KEYBOARD_KEY_CODE.ARROW_UP:
+        const enterLastPosition = textarea.value.lastIndexOf('\n', textareaStartPosition - 1);
+        setCursorPosition(enterLastPosition !== - 1 ? enterLastPosition : 0);
+        break;
+      case KEYBOARD_KEY_CODE.ARROW_DOWN:
+        const enterFirstPosition = textarea.value.indexOf('\n', textareaEndPosition + 1);
+        setCursorPosition(enterFirstPosition !== - 1 ? enterFirstPosition + 1 : textarea.value.length);
+        break;
+      case KEYBOARD_KEY_CODE.SHIFT_LEFT:
+      case KEYBOARD_KEY_CODE.SHIFT_RIGHT:
+        isShiftPressed = true;
+        break;
+      case KEYBOARD_KEY_CODE.ALT_LEFT:
+      case KEYBOARD_KEY_CODE.ALT_RIGHT:
+        isAltPressed = true;
+        break;
+      default:
+        setCursorPosition();
+    }
+
+    if (isShiftPressed && isAltPressed) {
+      toggleLang();
+      updateKeyboardKeyTexts(isShiftPressed, isCapsLockPressed);
     }
   }
 }
