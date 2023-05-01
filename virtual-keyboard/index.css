@@ -14,6 +14,7 @@ body {
   max-width: 900px;
   padding: 0 20px;
   margin: 0 auto;
+  text-align: center;
 }
 
 .display,
@@ -83,4 +84,14 @@ body {
 
 .keyboard__key--space {
   flex: 1;
+}
+
+.title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+}
+
+.paragraph {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
 }

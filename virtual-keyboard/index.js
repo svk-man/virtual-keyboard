@@ -46,13 +46,20 @@ init();
 async function init() {
   try {
     const wrapper = createWrapper();
+    const title = createTitle('RSS Виртуальная клавиатура');
     const display = createDisplay();
 
     const keysJson = await getKeysJson();
     const keyboard = createKeyboard(keysJson.keys);
 
+    const description = createParagraph('Клавиатура создана в операционной системе Windows    ');
+    const lang = createParagraph('Для переключения языка комбинация: shift + alt');
+
+    wrapper.append(title);
     wrapper.append(display);
     wrapper.append(keyboard);
+    wrapper.append(description);
+    wrapper.append(lang);
 
     document.body.append(wrapper);
 
@@ -372,4 +379,22 @@ function setCursorPosition(position) {
 
   textarea.setSelectionRange(newPosition, newPosition);
   textarea.focus();
+}
+
+function createTitle(text) {
+  const title = document.createElement('h1');
+
+  title.textContent = text;
+  title.className = 'title';
+
+  return title;
+}
+
+function createParagraph(text) {
+  const paragraph = document.createElement('p');
+
+  paragraph.textContent = text;
+  paragraph.className = 'paragraph';
+
+  return paragraph;
 }
