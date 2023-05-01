@@ -1,6 +1,7 @@
+/* eslint-disable no-case-declarations */
 const LANG = {
-  'EN': 'en',
-  'RU': 'ru',
+  EN: 'en',
+  RU: 'ru',
 };
 
 let currentLang = localStorage.getItem('lang') || LANG.EN;
@@ -9,31 +10,31 @@ let isCapsLockPressed = false;
 let isAltPressed = false;
 
 const KEYBOARD_KEY_DATASET = {
-  'CODE': 'code',
-  'TEXT_EN': 'textEn',
-  'TEXT_RU': 'textRu',
-  'SHIFT_TEXT_EN': 'shiftTextEn',
-  'SHIFT_TEXT_RU': 'shiftTextRu',
-}
+  CODE: 'code',
+  TEXT_EN: 'textEn',
+  TEXT_RU: 'textRu',
+  SHIFT_TEXT_EN: 'shiftTextEn',
+  SHIFT_TEXT_RU: 'shiftTextRu',
+};
 
 const KEYBOARD_KEY_CODE = {
-  'BACKSPACE': 'Backspace',
-  'TAB': 'Tab',
-  'DELETE': 'Delete',
-  'CAPSLOCK': 'CapsLock',
-  'ENTER': 'Enter',
-  'SHIFT_LEFT': 'ShiftLeft',
-  'SHIFT_RIGHT': 'ShiftRight',
-  'CONTROL_LEFT': 'ControlLeft',
-  'CONTROL_RIGHT': 'ControlRight',
-  'WIN': 'MetaLeft',
-  'ALT_LEFT': 'AltLeft',
-  'ALT_RIGHT': 'AltRight',
-  'ARROW_UP': 'ArrowUp',
-  'ARROW_LEFT': 'ArrowLeft',
-  'ARROW_DOWN': 'ArrowDown',
-  'ARROW_RIGHT': 'ArrowRight',
-  'SPACE': 'Space',
+  BACKSPACE: 'Backspace',
+  TAB: 'Tab',
+  DELETE: 'Delete',
+  CAPSLOCK: 'CapsLock',
+  ENTER: 'Enter',
+  SHIFT_LEFT: 'ShiftLeft',
+  SHIFT_RIGHT: 'ShiftRight',
+  CONTROL_LEFT: 'ControlLeft',
+  CONTROL_RIGHT: 'ControlRight',
+  WIN: 'MetaLeft',
+  ALT_LEFT: 'AltLeft',
+  ALT_RIGHT: 'AltRight',
+  ARROW_UP: 'ArrowUp',
+  ARROW_LEFT: 'ArrowLeft',
+  ARROW_DOWN: 'ArrowDown',
+  ARROW_RIGHT: 'ArrowRight',
+  SPACE: 'Space',
 };
 
 let prevKeyboardKey = null;
@@ -61,15 +62,15 @@ async function init() {
     textarea = document.querySelector('.display__textarea');
 
     setCursorPosition();
-  } catch(err) {
-    console.log(err);
+  } catch (err) {
+    // console.log(err);
   }
 }
 
 async function getKeysJson() {
   const response = await fetch('keys.json');
 
-  if (response.status == 200) {
+  if (response.status === 200) {
     const keysJson = await response.json();
 
     return keysJson;
@@ -100,7 +101,7 @@ function createKeyboardKeys(keys) {
 
   keyboardKeys.className = 'keyboard__keys';
 
-  keys.forEach(key => {
+  keys.forEach((key) => {
     keyboardKeys.append(createKeyboardKey(key));
   });
 
@@ -113,9 +114,9 @@ function createKeyboardKeys(keys) {
 
 function createKeyboardKey(key) {
   const keyboardKey = document.createElement('button');
-  const langText = key['text'];
-  const shiftText = key['shiftText'];
-  const code = key['code'];
+  const langText = key.text;
+  const { shiftText } = key;
+  const { code } = key;
 
   keyboardKey.className = 'keyboard__key';
   if (code === 'CapsLock' || code === 'Enter' || code === 'ShiftLeft' || code === 'ShiftRight') {
@@ -152,15 +153,15 @@ function createKeyboardKey(key) {
 
   if (typeof langText === 'object') {
     keyboardKey.textContent = langText[currentLang];
-    keyboardKey.dataset[KEYBOARD_KEY_DATASET.TEXT_EN] = key['text'][LANG.EN];
-    keyboardKey.dataset[KEYBOARD_KEY_DATASET.TEXT_RU] = key['text'][LANG.RU];
+    keyboardKey.dataset[KEYBOARD_KEY_DATASET.TEXT_EN] = key.text[LANG.EN];
+    keyboardKey.dataset[KEYBOARD_KEY_DATASET.TEXT_RU] = key.text[LANG.RU];
   } else {
-    keyboardKey.textContent = key['text'];
+    keyboardKey.textContent = key.text;
   }
 
   if (shiftText) {
-    keyboardKey.dataset[KEYBOARD_KEY_DATASET.SHIFT_TEXT_EN] = key['shiftText'][LANG.EN];
-    keyboardKey.dataset[KEYBOARD_KEY_DATASET.SHIFT_TEXT_RU] = key['shiftText'][LANG.RU];
+    keyboardKey.dataset[KEYBOARD_KEY_DATASET.SHIFT_TEXT_EN] = key.shiftText[LANG.EN];
+    keyboardKey.dataset[KEYBOARD_KEY_DATASET.SHIFT_TEXT_RU] = key.shiftText[LANG.RU];
   }
 
   return keyboardKey;
@@ -182,18 +183,21 @@ function toggleLang() {
   localStorage.setItem('lang', currentLang);
 }
 
-function updateKeyboardKeyTexts(isShiftPressed, isCapsLockPressed) {
-  const keyboardKeys = document.querySelectorAll(`[data-code]`);
+function updateKeyboardKeyTexts() {
+  const keyboardKeys = document.querySelectorAll('[data-code]');
 
-  keyboardKeys.forEach(keyboardKey => {
-    const textEn = isShiftPressed ? keyboardKey.dataset[KEYBOARD_KEY_DATASET.SHIFT_TEXT_EN] : keyboardKey.dataset[KEYBOARD_KEY_DATASET.TEXT_EN];
-    const textRu = isShiftPressed ? keyboardKey.dataset[KEYBOARD_KEY_DATASET.SHIFT_TEXT_RU] : keyboardKey.dataset[KEYBOARD_KEY_DATASET.TEXT_RU];
+  keyboardKeys.forEach((keyboardKey) => {
+    const textEn = isShiftPressed ? keyboardKey.dataset[KEYBOARD_KEY_DATASET.SHIFT_TEXT_EN]
+      : keyboardKey.dataset[KEYBOARD_KEY_DATASET.TEXT_EN];
+    const textRu = isShiftPressed ? keyboardKey.dataset[KEYBOARD_KEY_DATASET.SHIFT_TEXT_RU]
+      : keyboardKey.dataset[KEYBOARD_KEY_DATASET.TEXT_RU];
 
     let text = currentLang === LANG.EN ? textEn : textRu;
     if (isCapsLockPressed && isLetter(text)) {
       text = isShiftPressed ? text.toLowerCase() : text.toUpperCase();
     }
 
+    // eslint-disable-next-line no-param-reassign
     keyboardKey.textContent = text;
   });
 }
@@ -283,55 +287,56 @@ function handleClick(event) {
 }
 
 function handleKeyboardKey(keyboardKey) {
-  const textareaStartPosition = textarea.selectionStart;
-  const textareaEndPosition = textarea.selectionEnd;
+  const start = textarea.selectionStart;
+  const end = textarea.selectionEnd;
 
   const code = keyboardKey.dataset[KEYBOARD_KEY_DATASET.CODE];
-  let value = keyboardKey.textContent;
+  const value = keyboardKey.textContent;
 
   if (!Object.values(KEYBOARD_KEY_CODE).includes(code)) {
-    textarea.value = addSymbol(textarea.value, value, textareaStartPosition, textareaEndPosition);
-    setCursorPosition(textareaStartPosition + 1);
+    textarea.value = addSymbol(textarea.value, value, start, end);
+    setCursorPosition(start + 1);
   } else {
     switch (code) {
       case KEYBOARD_KEY_CODE.BACKSPACE:
-        const newTextareaStartPosition = textareaStartPosition === textareaEndPosition ? textareaStartPosition - 1 : textareaStartPosition;
-        textarea.value = removeSymbol(textarea.value, newTextareaStartPosition, textareaEndPosition);
-        setCursorPosition(newTextareaStartPosition);
+        const newStart = start === end ? start - 1 : start;
+        textarea.value = removeSymbol(textarea.value, newStart, end);
+        setCursorPosition(newStart);
         break;
       case KEYBOARD_KEY_CODE.TAB:
-        textarea.value = addSymbol(textarea.value, '\t', textareaStartPosition, textareaEndPosition);
-        setCursorPosition(textareaStartPosition + 1);
+        textarea.value = addSymbol(textarea.value, '\t', start, end);
+        setCursorPosition(start + 1);
         break;
       case KEYBOARD_KEY_CODE.DELETE:
-        const newTextareaEndPosition = textareaStartPosition === textareaEndPosition ? textareaEndPosition + 1 : textareaEndPosition;
-        textarea.value = removeSymbol(textarea.value, textareaStartPosition, newTextareaEndPosition);
-        setCursorPosition(textareaStartPosition);
+        const newEnd = start === end ? end + 1 : end;
+        textarea.value = removeSymbol(textarea.value, start, newEnd);
+        setCursorPosition(start);
         break;
       case KEYBOARD_KEY_CODE.ENTER:
-        textarea.value = addSymbol(textarea.value, '\n', textareaStartPosition, textareaEndPosition);
-        setCursorPosition(textareaStartPosition + 1);
+        textarea.value = addSymbol(textarea.value, '\n', start, end);
+        setCursorPosition(start + 1);
         break;
       case KEYBOARD_KEY_CODE.CAPSLOCK:
         isCapsLockPressed = !isCapsLockPressed;
         break;
       case KEYBOARD_KEY_CODE.SPACE:
-        textarea.value = addSymbol(textarea.value, ' ', textareaStartPosition, textareaEndPosition);
-        setCursorPosition(textareaStartPosition + 1);
+        textarea.value = addSymbol(textarea.value, ' ', start, end);
+        setCursorPosition(start + 1);
         break;
       case KEYBOARD_KEY_CODE.ARROW_LEFT:
-        setCursorPosition(textareaStartPosition - 1);
+        setCursorPosition(start - 1);
         break;
       case KEYBOARD_KEY_CODE.ARROW_RIGHT:
-        setCursorPosition(textareaStartPosition + 1);
+        setCursorPosition(start + 1);
         break;
       case KEYBOARD_KEY_CODE.ARROW_UP:
-        const enterLastPosition = textarea.value.lastIndexOf('\n', textareaStartPosition - 1);
-        setCursorPosition(enterLastPosition !== - 1 ? enterLastPosition : 0);
+        const enterLastPosition = textarea.value.lastIndexOf('\n', start - 1);
+        setCursorPosition(enterLastPosition !== -1 ? enterLastPosition : 0);
         break;
       case KEYBOARD_KEY_CODE.ARROW_DOWN:
-        const enterFirstPosition = textarea.value.indexOf('\n', textareaEndPosition + 1);
-        setCursorPosition(enterFirstPosition !== - 1 ? enterFirstPosition + 1 : textarea.value.length);
+        const enterFirstPosition = textarea.value.indexOf('\n', end + 1);
+        const position = enterFirstPosition !== -1 ? enterFirstPosition + 1 : textarea.value.length;
+        setCursorPosition(position);
         break;
       case KEYBOARD_KEY_CODE.SHIFT_LEFT:
       case KEYBOARD_KEY_CODE.SHIFT_RIGHT:
@@ -362,14 +367,9 @@ function removeSymbol(str, start, end) {
 
 function setCursorPosition(position) {
   const end = textarea.value.length;
-  position = position !== undefined ? position : end;
-  position = position < 0 ? 0 : position;
+  let newPosition = position !== undefined ? position : end;
+  newPosition = newPosition < 0 ? 0 : newPosition;
 
-  textarea.setSelectionRange(position, position);
+  textarea.setSelectionRange(newPosition, newPosition);
   textarea.focus();
 }
-
-function removeSymbolOnRight(str, position) {
-  return str.slice(0, position) + str.slice(position + 1);
-}
-
