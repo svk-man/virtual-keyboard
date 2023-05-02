@@ -193,6 +193,7 @@ function handleKeyDown(event) {
 
 	isLeftAltPressed = keyCode === KEYBOARD_KEY_CODE.ALT_LEFT;
 	if (isLeftAltPressed) {
+		event.preventDefault();
 		isLeftAltActive = true;
 	}
 
@@ -205,7 +206,7 @@ function handleKeyDown(event) {
 
 	if (isLeftShiftActive && isLeftAltActive) {
 		toggleLang();
-		updateKeyboardKeyTexts(isLeftShiftPressed);
+		updateKeyboardKeyTexts(isLeftShiftActive);
 	}
 }
 
@@ -252,6 +253,7 @@ function handleKeyUp(event) {
 
   isLeftShiftPressed = keyCode === KEYBOARD_KEY_CODE.SHIFT_LEFT;
 	if (isLeftShiftPressed) {
+		console.log(1);
 		isLeftShiftActive = false;
 		updateKeyboardKeyTexts(false);
 	}
@@ -302,30 +304,66 @@ function createDisplay() {
 function handleMouseDown(event) {
   const keyboardKey = event.target;
   const isKeyboardKey = keyboardKey.classList.contains('keyboard__key');
-  prevKeyboardKey = keyboardKey;
 
-  if (isKeyboardKey) {
-    handleKeyboardInputKey(keyboardKey);
-    setActiveKeyboardKey(keyboardKey);
-		isLeftShiftPressed = event.code === KEYBOARD_KEY_CODE.SHIFT_LEFT;
-		if (isLeftShiftPressed) {
-			updateKeyboardKeyTexts(isLeftShiftPressed, isCapsLockPressed);
-		}
-  }
+	if (!isKeyboardKey) {
+		return;
+	}
+
+	const keyCode = keyboardKey.dataset[KEYBOARD_KEY_DATASET.CODE];
+	prevKeyboardKey = keyboardKey;
+
+	handleKeyboardInputKey(keyboardKey);
+  setActiveKeyboardKey(keyboardKey);
+
+	isLeftAltPressed = keyCode === KEYBOARD_KEY_CODE.ALT_LEFT;
+	if (isLeftAltPressed) {
+		event.preventDefault();
+		isLeftAltActive = true;
+	}
+
+  isLeftShiftPressed = keyCode === KEYBOARD_KEY_CODE.SHIFT_LEFT;
+	if (isLeftShiftPressed) {
+		isLeftShiftActive = true;
+
+		updateKeyboardKeyTexts(isLeftShiftPressed);
+	}
+
+	if (isLeftShiftActive && isLeftAltActive) {
+		toggleLang();
+		updateKeyboardKeyTexts(isLeftShiftActive);
+	}
 }
 
 function handleMouseUp() {
   if (prevKeyboardKey) {
-    const keyCode = prevKeyboardKey.dataset[KEYBOARD_KEY_DATASET.CODE];
+    const prevKeyCode = prevKeyboardKey.dataset[KEYBOARD_KEY_DATASET.CODE];
 
-    setInactiveKeyboardKey(prevKeyboardKey);
-    if (keyCode === KEYBOARD_KEY_CODE.CAPSLOCK) {
-      if (isCapsLockPressed) {
-        setActiveKeyboardKey(prevKeyboardKey);
-      } else {
-        setInactiveKeyboardKey(prevKeyboardKey);
-      }
-    }
+		setInactiveKeyboardKey(prevKeyboardKey);
+
+		isLeftShiftPressed = prevKeyCode === KEYBOARD_KEY_CODE.SHIFT_LEFT;
+		if (isLeftShiftPressed) {
+			isLeftShiftActive = false;
+			updateKeyboardKeyTexts(false);
+		}
+
+		isLeftAltPressed = prevKeyCode === KEYBOARD_KEY_CODE.ALT_LEFT;
+		if (isLeftAltPressed) {
+			isLeftAltActive = false;
+		}
+
+		isCapsLockPressed = prevKeyCode === KEYBOARD_KEY_CODE.CAPSLOCK;
+		if (isCapsLockPressed) {
+			isCapsLockActive = !isCapsLockActive;
+			updateKeyboardKeyTexts(isLeftShiftPressed);
+		}
+
+		if (isCapsLockPressed) {
+			if (isCapsLockActive) {
+				setActiveKeyboardKey(prevKeyboardKey);
+			} else {
+				setInactiveKeyboardKey(prevKeyboardKey);
+			}
+		}
   }
 }
 
@@ -400,7 +438,7 @@ function handleKeyboardInputKey(keyboardKey) {
         isRightAltPressed = true;
         break;*/
       default:
-        break;
+				setCursorPosition();
     }
   }
 }
