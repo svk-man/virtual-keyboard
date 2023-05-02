@@ -183,6 +183,9 @@ function createKeyboardKey(key) {
 function handleKeyDown(event) {
   const keyCode = event.code;
   const keyboardKey = document.querySelector(`[data-code="${keyCode}"`);
+	if (!keyboardKey) {
+		return;
+	}
 
   setActiveKeyboardKey(keyboardKey);
 
@@ -223,8 +226,13 @@ function setActiveKeyboardKey(keyboardKey) {
 function handleKeyUp(event) {
   const keyCode = event.code;
   const keyboardKey = document.querySelector(`[data-code="${keyCode}"`);
+	if (!keyboardKey) {
+		return;
+	}
 
-  handleKeyboardInputKey(keyboardKey);
+	if (document.activeElement !== document.querySelector('.display__textarea')) {
+		handleKeyboardInputKey(keyboardKey);
+	}
 
   setInactiveKeyboardKey(keyboardKey);
 
@@ -235,6 +243,7 @@ function handleKeyUp(event) {
 
 	isCapsLockPressed = keyCode === KEYBOARD_KEY_CODE.CAPSLOCK;
 	if (isCapsLockPressed) {
+		isCapsLockActive = !isCapsLockActive;
 		updateKeyboardKeyTexts(isLeftShiftPressed);
 	}
 
@@ -339,9 +348,6 @@ function handleKeyboardInputKey(keyboardKey) {
         textarea.value = addSymbol(textarea.value, '\n', start, end);
         setCursorPosition(start + 1);
         break;
-      case KEYBOARD_KEY_CODE.CAPSLOCK:
-        isCapsLockActive = !isCapsLockActive;
-        break;
       case KEYBOARD_KEY_CODE.SPACE:
         textarea.value = addSymbol(textarea.value, ' ', start, end);
         setCursorPosition(start + 1);
@@ -376,20 +382,6 @@ function handleKeyboardInputKey(keyboardKey) {
       default:
         break;
     }
-  }
-}
-
-function handleKeyboardManageKey(keyboardKey) {
-	const keyCode = keyboardKey.dataset[KEYBOARD_KEY_DATASET.CODE];
-
-	isLeftShiftPressed = !(keyCode === KEYBOARD_KEY_CODE.SHIFT_LEFT);
-	if (!isLeftShiftPressed) {
-		updateKeyboardKeyTexts(isLeftShiftPressed, isCapsLockActive);
-	}
-
-	if (isLeftShiftPressed && isLeftAltPressed) {
-    toggleLang();
-    updateKeyboardKeyTexts(isLeftShiftPressed, isCapsLockActive);
   }
 }
 
