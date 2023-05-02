@@ -5,9 +5,14 @@ const LANG = {
 };
 
 let currentLang = localStorage.getItem('lang') || LANG.EN;
-let isShiftPressed = false;
+let isLeftShiftPressed = false;
+let isLeftShiftActive = false;
+let isRightShiftPressed = false;
+let isLeftAltPressed = false;
+let isLeftAltActive = false;
+let isRightAltPressed = false;
 let isCapsLockPressed = false;
-let isAltPressed = false;
+let isCapsLockActive = false;
 
 const KEYBOARD_KEY_DATASET = {
   CODE: 'code',
@@ -134,28 +139,6 @@ function createKeyboardKey(key) {
     keyboardKey.classList.add('keyboard__key--space');
   }
 
-  if (code === KEYBOARD_KEY_CODE.SHIFT_LEFT || code === KEYBOARD_KEY_CODE.SHIFT_RIGHT) {
-    keyboardKey.addEventListener('mousedown', () => {
-      isShiftPressed = true;
-      updateKeyboardKeyTexts(isShiftPressed, isCapsLockPressed);
-    });
-
-    keyboardKey.addEventListener('mouseup', () => {
-      isShiftPressed = false;
-      updateKeyboardKeyTexts(isShiftPressed, isCapsLockPressed);
-    });
-  }
-
-  if (code === KEYBOARD_KEY_CODE.ALT_LEFT || code === KEYBOARD_KEY_CODE.ALT_RIGHT) {
-    keyboardKey.addEventListener('mousedown', () => {
-      isAltPressed = true;
-    });
-
-    keyboardKey.addEventListener('mouseup', () => {
-      isAltPressed = false;
-    });
-  }
-
   keyboardKey.dataset[KEYBOARD_KEY_DATASET.CODE] = code;
 
   if (typeof langText === 'object') {
@@ -177,12 +160,29 @@ function createKeyboardKey(key) {
 function handleKeyDown(event) {
   const keyCode = event.code;
   const keyboardKey = document.querySelector(`[data-code="${keyCode}"`);
+  if (!keyboardKey) {
+    return;
+  }
 
   setActiveKeyboardKey(keyboardKey);
 
-  isShiftPressed = event.shiftKey;
-  isAltPressed = event.altKey;
-  updateKeyboardKeyTexts(isShiftPressed, isCapsLockPressed);
+  isLeftAltPressed = keyCode === KEYBOARD_KEY_CODE.ALT_LEFT;
+  if (isLeftAltPressed) {
+    event.preventDefault();
+    isLeftAltActive = true;
+  }
+
+  isLeftShiftPressed = keyCode === KEYBOARD_KEY_CODE.SHIFT_LEFT;
+  if (isLeftShiftPressed) {
+    isLeftShiftActive = true;
+
+    updateKeyboardKeyTexts(isLeftShiftPressed);
+  }
+
+  if (isLeftShiftActive && isLeftAltActive) {
+    toggleLang();
+    updateKeyboardKeyTexts(isLeftShiftActive);
+  }
 }
 
 function toggleLang() {
@@ -190,18 +190,18 @@ function toggleLang() {
   localStorage.setItem('lang', currentLang);
 }
 
-function updateKeyboardKeyTexts() {
+function updateKeyboardKeyTexts(isLeftShiftPressed) {
   const keyboardKeys = document.querySelectorAll('[data-code]');
 
   keyboardKeys.forEach((keyboardKey) => {
-    const textEn = isShiftPressed ? keyboardKey.dataset[KEYBOARD_KEY_DATASET.SHIFT_TEXT_EN]
+    const textEn = isLeftShiftPressed ? keyboardKey.dataset[KEYBOARD_KEY_DATASET.SHIFT_TEXT_EN]
       : keyboardKey.dataset[KEYBOARD_KEY_DATASET.TEXT_EN];
-    const textRu = isShiftPressed ? keyboardKey.dataset[KEYBOARD_KEY_DATASET.SHIFT_TEXT_RU]
+    const textRu = isLeftShiftPressed ? keyboardKey.dataset[KEYBOARD_KEY_DATASET.SHIFT_TEXT_RU]
       : keyboardKey.dataset[KEYBOARD_KEY_DATASET.TEXT_RU];
 
     let text = currentLang === LANG.EN ? textEn : textRu;
-    if (isCapsLockPressed && isLetter(text)) {
-      text = isShiftPressed ? text.toLowerCase() : text.toUpperCase();
+    if (isCapsLockActive && isLetter(text)) {
+      text = isLeftShiftPressed ? text.toLowerCase() : text.toUpperCase();
     }
 
     // eslint-disable-next-line no-param-reassign
@@ -216,17 +216,35 @@ function setActiveKeyboardKey(keyboardKey) {
 function handleKeyUp(event) {
   const keyCode = event.code;
   const keyboardKey = document.querySelector(`[data-code="${keyCode}"`);
+  if (!keyboardKey) {
+    return;
+  }
 
-  handleKeyboardKey(keyboardKey);
+  if (document.activeElement !== document.querySelector('.display__textarea')) {
+    handleKeyboardInputKey(keyboardKey);
+  }
 
   setInactiveKeyboardKey(keyboardKey);
 
-  isShiftPressed = event.shiftKey;
-  isAltPressed = event.altKey;
-  updateKeyboardKeyTexts(isShiftPressed, isCapsLockPressed);
+  isLeftShiftPressed = keyCode === KEYBOARD_KEY_CODE.SHIFT_LEFT;
+  if (isLeftShiftPressed) {
+    isLeftShiftActive = false;
+    updateKeyboardKeyTexts(false);
+  }
 
-  if (keyCode === KEYBOARD_KEY_CODE.CAPSLOCK) {
-    if (isCapsLockPressed) {
+  isLeftAltPressed = keyCode === KEYBOARD_KEY_CODE.ALT_LEFT;
+  if (isLeftAltPressed) {
+    isLeftAltActive = false;
+  }
+
+  isCapsLockPressed = keyCode === KEYBOARD_KEY_CODE.CAPSLOCK;
+  if (isCapsLockPressed) {
+    isCapsLockActive = !isCapsLockActive;
+    updateKeyboardKeyTexts(isLeftShiftPressed);
+  }
+
+  if (isCapsLockPressed) {
+    if (isCapsLockActive) {
       setActiveKeyboardKey(keyboardKey);
     } else {
       setInactiveKeyboardKey(keyboardKey);
@@ -260,22 +278,61 @@ function createDisplay() {
 function handleMouseDown(event) {
   const keyboardKey = event.target;
   const isKeyboardKey = keyboardKey.classList.contains('keyboard__key');
+
+  if (!isKeyboardKey) {
+    return;
+  }
+
+  const keyCode = keyboardKey.dataset[KEYBOARD_KEY_DATASET.CODE];
   prevKeyboardKey = keyboardKey;
 
-  if (isKeyboardKey) {
-    handleKeyboardKey(keyboardKey);
-    setActiveKeyboardKey(keyboardKey);
-    updateKeyboardKeyTexts(isShiftPressed, isCapsLockPressed);
+  handleKeyboardInputKey(keyboardKey);
+  setActiveKeyboardKey(keyboardKey);
+
+  isLeftAltPressed = keyCode === KEYBOARD_KEY_CODE.ALT_LEFT;
+  if (isLeftAltPressed) {
+    event.preventDefault();
+    isLeftAltActive = true;
+  }
+
+  isLeftShiftPressed = keyCode === KEYBOARD_KEY_CODE.SHIFT_LEFT;
+  if (isLeftShiftPressed) {
+    isLeftShiftActive = true;
+
+    updateKeyboardKeyTexts(isLeftShiftPressed);
+  }
+
+  if (isLeftShiftActive && isLeftAltActive) {
+    toggleLang();
+    updateKeyboardKeyTexts(isLeftShiftActive);
   }
 }
 
 function handleMouseUp() {
   if (prevKeyboardKey) {
-    const keyCode = prevKeyboardKey.dataset[KEYBOARD_KEY_DATASET.CODE];
+    const prevKeyCode = prevKeyboardKey.dataset[KEYBOARD_KEY_DATASET.CODE];
 
     setInactiveKeyboardKey(prevKeyboardKey);
-    if (keyCode === KEYBOARD_KEY_CODE.CAPSLOCK) {
-      if (isCapsLockPressed) {
+
+    isLeftShiftPressed = prevKeyCode === KEYBOARD_KEY_CODE.SHIFT_LEFT;
+    if (isLeftShiftPressed) {
+      isLeftShiftActive = false;
+      updateKeyboardKeyTexts(false);
+    }
+
+    isLeftAltPressed = prevKeyCode === KEYBOARD_KEY_CODE.ALT_LEFT;
+    if (isLeftAltPressed) {
+      isLeftAltActive = false;
+    }
+
+    isCapsLockPressed = prevKeyCode === KEYBOARD_KEY_CODE.CAPSLOCK;
+    if (isCapsLockPressed) {
+      isCapsLockActive = !isCapsLockActive;
+      updateKeyboardKeyTexts(isLeftShiftPressed);
+    }
+
+    if (isCapsLockPressed) {
+      if (isCapsLockActive) {
         setActiveKeyboardKey(prevKeyboardKey);
       } else {
         setInactiveKeyboardKey(prevKeyboardKey);
@@ -293,7 +350,7 @@ function handleClick(event) {
   }
 }
 
-function handleKeyboardKey(keyboardKey) {
+function handleKeyboardInputKey(keyboardKey) {
   const start = textarea.selectionStart;
   const end = textarea.selectionEnd;
 
@@ -323,9 +380,6 @@ function handleKeyboardKey(keyboardKey) {
         textarea.value = addSymbol(textarea.value, '\n', start, end);
         setCursorPosition(start + 1);
         break;
-      case KEYBOARD_KEY_CODE.CAPSLOCK:
-        isCapsLockPressed = !isCapsLockPressed;
-        break;
       case KEYBOARD_KEY_CODE.SPACE:
         textarea.value = addSymbol(textarea.value, ' ', start, end);
         setCursorPosition(start + 1);
@@ -345,21 +399,8 @@ function handleKeyboardKey(keyboardKey) {
         const position = enterFirstPosition !== -1 ? enterFirstPosition + 1 : textarea.value.length;
         setCursorPosition(position);
         break;
-      case KEYBOARD_KEY_CODE.SHIFT_LEFT:
-      case KEYBOARD_KEY_CODE.SHIFT_RIGHT:
-        isShiftPressed = true;
-        break;
-      case KEYBOARD_KEY_CODE.ALT_LEFT:
-      case KEYBOARD_KEY_CODE.ALT_RIGHT:
-        isAltPressed = true;
-        break;
       default:
-        setCursorPosition();
-    }
-
-    if (isShiftPressed && isAltPressed) {
-      toggleLang();
-      updateKeyboardKeyTexts(isShiftPressed, isCapsLockPressed);
+        break;
     }
   }
 }
