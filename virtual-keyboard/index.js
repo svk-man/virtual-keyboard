@@ -228,7 +228,6 @@ function handleKeyUp(event) {
 
   isLeftShiftPressed = keyCode === KEYBOARD_KEY_CODE.SHIFT_LEFT;
   if (isLeftShiftPressed) {
-    console.log(1);
     isLeftShiftActive = false;
     updateKeyboardKeyTexts(false);
   }
