@@ -6,8 +6,10 @@ const LANG = {
 
 let currentLang = localStorage.getItem('lang') || LANG.EN;
 let isLeftShiftPressed = false;
+let isLeftShiftActive = false;
 let isRightShiftPressed = false;
 let isLeftAltPressed = false;
+let isLeftAltActive = false;
 let isRightAltPressed = false;
 let isCapsLockPressed = false;
 let isCapsLockActive = false;
@@ -189,8 +191,20 @@ function handleKeyDown(event) {
 
   setActiveKeyboardKey(keyboardKey);
 
+	isLeftAltPressed = keyCode === KEYBOARD_KEY_CODE.ALT_LEFT;
+	if (isLeftAltPressed) {
+		isLeftAltActive = true;
+	}
+
   isLeftShiftPressed = keyCode === KEYBOARD_KEY_CODE.SHIFT_LEFT;
 	if (isLeftShiftPressed) {
+		isLeftShiftActive = true;
+
+		updateKeyboardKeyTexts(isLeftShiftPressed);
+	}
+
+	if (isLeftShiftActive && isLeftAltActive) {
+		toggleLang();
 		updateKeyboardKeyTexts(isLeftShiftPressed);
 	}
 }
@@ -238,7 +252,13 @@ function handleKeyUp(event) {
 
   isLeftShiftPressed = keyCode === KEYBOARD_KEY_CODE.SHIFT_LEFT;
 	if (isLeftShiftPressed) {
+		isLeftShiftActive = false;
 		updateKeyboardKeyTexts(false);
+	}
+
+	isLeftAltPressed = keyCode === KEYBOARD_KEY_CODE.ALT_LEFT;
+	if (isLeftAltPressed) {
+		isLeftAltActive = false;
 	}
 
 	isCapsLockPressed = keyCode === KEYBOARD_KEY_CODE.CAPSLOCK;
