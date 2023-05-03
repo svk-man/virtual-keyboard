@@ -392,7 +392,7 @@ function handleKeyboardInputKey(keyboardKey) {
         setCursorPosition(start + 1);
         break;
       case KEYBOARD_KEY_CODE.ARROW_UP:
-        setCursorPositionDown();
+        setCursorPositionUp();
         break;
       case KEYBOARD_KEY_CODE.ARROW_DOWN:
 				setCursorPositionDown();
@@ -420,6 +420,37 @@ function setCursorPosition(position) {
   textarea.focus();
 }
 
+function setCursorPositionUp() {
+	const start = textarea.selectionStart;
+	const textLines = textarea.value.split('\n');
+
+	let beginIndex = 0;
+	let endIndex = 0;
+	const currentLineIndex = textLines.findIndex((textLine, index) => {
+		beginIndex = endIndex;
+		endIndex += textLine.length;
+		if (index) {
+			beginIndex += 1;
+			endIndex += 1;
+		}
+
+		return endIndex >= start;
+	});
+
+	const prevLine = textLines[currentLineIndex - 1];
+	if (!prevLine) {
+		setCursorPosition(0);
+		return;
+	}
+
+	const shift = start - beginIndex;
+	if (prevLine.length < shift) {
+		setCursorPosition(beginIndex - 1);
+	} else {
+		setCursorPosition(beginIndex - prevLine.length - 1 + shift);
+	}
+}
+
 function setCursorPositionDown() {
 	const end = textarea.selectionEnd;
 	const textLines = textarea.value.split('\n');
@@ -443,7 +474,7 @@ function setCursorPositionDown() {
 		return;
 	}
 
-	const shift = -(beginIndex - end);
+	const shift = end - beginIndex;
 	if (nextLine.length < shift) {
 		setCursorPosition(endIndex + 1 + nextLine.length);
 	} else {
