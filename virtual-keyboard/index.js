@@ -220,6 +220,7 @@ function handleKeyUp(event) {
     return;
   }
 
+	console.log(document.activeElement !== document.querySelector('.display__textarea'));
   if (document.activeElement !== document.querySelector('.display__textarea')) {
     handleKeyboardInputKey(keyboardKey);
   }
@@ -391,13 +392,10 @@ function handleKeyboardInputKey(keyboardKey) {
         setCursorPosition(start + 1);
         break;
       case KEYBOARD_KEY_CODE.ARROW_UP:
-        const enterLastPosition = textarea.value.lastIndexOf('\n', start - 1);
-        setCursorPosition(enterLastPosition !== -1 ? enterLastPosition : 0);
+        setCursorPositionUp();
         break;
       case KEYBOARD_KEY_CODE.ARROW_DOWN:
-        const enterFirstPosition = textarea.value.indexOf('\n', end + 1);
-        const position = enterFirstPosition !== -1 ? enterFirstPosition + 1 : textarea.value.length;
-        setCursorPosition(position);
+				setCursorPositionDown();
         break;
       default:
         break;
@@ -420,6 +418,68 @@ function setCursorPosition(position) {
 
   textarea.setSelectionRange(newPosition, newPosition);
   textarea.focus();
+}
+
+function setCursorPositionUp() {
+	const start = textarea.selectionStart;
+	const textLines = textarea.value.split('\n');
+
+	let beginIndex = 0;
+	let endIndex = 0;
+	const currentLineIndex = textLines.findIndex((textLine, index) => {
+		beginIndex = endIndex;
+		endIndex += textLine.length;
+		if (index) {
+			beginIndex += 1;
+			endIndex += 1;
+		}
+
+		return endIndex >= start;
+	});
+
+	const prevLine = textLines[currentLineIndex - 1];
+	if (!prevLine) {
+		setCursorPosition(0);
+		return;
+	}
+
+	const shift = start - beginIndex;
+	if (prevLine.length < shift) {
+		setCursorPosition(beginIndex - 1);
+	} else {
+		setCursorPosition(beginIndex - prevLine.length - 1 + shift);
+	}
+}
+
+function setCursorPositionDown() {
+	const end = textarea.selectionEnd;
+	const textLines = textarea.value.split('\n');
+
+	let beginIndex = 0;
+	let endIndex = 0;
+	const currentLineIndex = textLines.findIndex((textLine, index) => {
+		beginIndex = endIndex;
+		endIndex += textLine.length;
+		if (index) {
+			beginIndex += 1;
+			endIndex += 1;
+		}
+
+		return endIndex >= end;
+	});
+
+	const nextLine = textLines[currentLineIndex + 1];
+	if (!nextLine) {
+		setCursorPosition(textarea.value.length);
+		return;
+	}
+
+	const shift = end - beginIndex;
+	if (nextLine.length < shift) {
+		setCursorPosition(endIndex + 1 + nextLine.length);
+	} else {
+		setCursorPosition(endIndex + 1 + shift);
+	}
 }
 
 function createTitle(text) {
