@@ -7,10 +7,8 @@ const LANG = {
 let currentLang = localStorage.getItem('lang') || LANG.EN;
 let isLeftShiftPressed = false;
 let isLeftShiftActive = false;
-let isRightShiftPressed = false;
 let isLeftAltPressed = false;
 let isLeftAltActive = false;
-let isRightAltPressed = false;
 let isCapsLockPressed = false;
 let isCapsLockActive = false;
 
@@ -190,18 +188,18 @@ function toggleLang() {
   localStorage.setItem('lang', currentLang);
 }
 
-function updateKeyboardKeyTexts(isLeftShiftPressed) {
+function updateKeyboardKeyTexts(isShiftPressed) {
   const keyboardKeys = document.querySelectorAll('[data-code]');
 
   keyboardKeys.forEach((keyboardKey) => {
-    const textEn = isLeftShiftPressed ? keyboardKey.dataset[KEYBOARD_KEY_DATASET.SHIFT_TEXT_EN]
+    const textEn = isShiftPressed ? keyboardKey.dataset[KEYBOARD_KEY_DATASET.SHIFT_TEXT_EN]
       : keyboardKey.dataset[KEYBOARD_KEY_DATASET.TEXT_EN];
-    const textRu = isLeftShiftPressed ? keyboardKey.dataset[KEYBOARD_KEY_DATASET.SHIFT_TEXT_RU]
+    const textRu = isShiftPressed ? keyboardKey.dataset[KEYBOARD_KEY_DATASET.SHIFT_TEXT_RU]
       : keyboardKey.dataset[KEYBOARD_KEY_DATASET.TEXT_RU];
 
     let text = currentLang === LANG.EN ? textEn : textRu;
     if (isCapsLockActive && isLetter(text)) {
-      text = isLeftShiftPressed ? text.toLowerCase() : text.toUpperCase();
+      text = isShiftPressed ? text.toLowerCase() : text.toUpperCase();
     }
 
     // eslint-disable-next-line no-param-reassign
@@ -220,7 +218,6 @@ function handleKeyUp(event) {
     return;
   }
 
-	console.log(document.activeElement !== document.querySelector('.display__textarea'));
   if (document.activeElement !== document.querySelector('.display__textarea')) {
     handleKeyboardInputKey(keyboardKey);
   }
@@ -395,7 +392,7 @@ function handleKeyboardInputKey(keyboardKey) {
         setCursorPositionUp();
         break;
       case KEYBOARD_KEY_CODE.ARROW_DOWN:
-				setCursorPositionDown();
+        setCursorPositionDown();
         break;
       default:
         break;
@@ -421,65 +418,65 @@ function setCursorPosition(position) {
 }
 
 function setCursorPositionUp() {
-	const start = textarea.selectionStart;
-	const textLines = textarea.value.split('\n');
+  const start = textarea.selectionStart;
+  const textLines = textarea.value.split('\n');
 
-	let beginIndex = 0;
-	let endIndex = 0;
-	const currentLineIndex = textLines.findIndex((textLine, index) => {
-		beginIndex = endIndex;
-		endIndex += textLine.length;
-		if (index) {
-			beginIndex += 1;
-			endIndex += 1;
-		}
+  let beginIndex = 0;
+  let endIndex = 0;
+  const currentLineIndex = textLines.findIndex((textLine, index) => {
+    beginIndex = endIndex;
+    endIndex += textLine.length;
+    if (index) {
+      beginIndex += 1;
+      endIndex += 1;
+    }
 
-		return endIndex >= start;
-	});
+    return endIndex >= start;
+  });
 
-	const prevLine = textLines[currentLineIndex - 1];
-	if (!prevLine) {
-		setCursorPosition(0);
-		return;
-	}
+  const prevLine = textLines[currentLineIndex - 1];
+  if (!prevLine) {
+    setCursorPosition(0);
+    return;
+  }
 
-	const shift = start - beginIndex;
-	if (prevLine.length < shift) {
-		setCursorPosition(beginIndex - 1);
-	} else {
-		setCursorPosition(beginIndex - prevLine.length - 1 + shift);
-	}
+  const shift = start - beginIndex;
+  if (prevLine.length < shift) {
+    setCursorPosition(beginIndex - 1);
+  } else {
+    setCursorPosition(beginIndex - prevLine.length - 1 + shift);
+  }
 }
 
 function setCursorPositionDown() {
-	const end = textarea.selectionEnd;
-	const textLines = textarea.value.split('\n');
+  const end = textarea.selectionEnd;
+  const textLines = textarea.value.split('\n');
 
-	let beginIndex = 0;
-	let endIndex = 0;
-	const currentLineIndex = textLines.findIndex((textLine, index) => {
-		beginIndex = endIndex;
-		endIndex += textLine.length;
-		if (index) {
-			beginIndex += 1;
-			endIndex += 1;
-		}
+  let beginIndex = 0;
+  let endIndex = 0;
+  const currentLineIndex = textLines.findIndex((textLine, index) => {
+    beginIndex = endIndex;
+    endIndex += textLine.length;
+    if (index) {
+      beginIndex += 1;
+      endIndex += 1;
+    }
 
-		return endIndex >= end;
-	});
+    return endIndex >= end;
+  });
 
-	const nextLine = textLines[currentLineIndex + 1];
-	if (!nextLine) {
-		setCursorPosition(textarea.value.length);
-		return;
-	}
+  const nextLine = textLines[currentLineIndex + 1];
+  if (!nextLine) {
+    setCursorPosition(textarea.value.length);
+    return;
+  }
 
-	const shift = end - beginIndex;
-	if (nextLine.length < shift) {
-		setCursorPosition(endIndex + 1 + nextLine.length);
-	} else {
-		setCursorPosition(endIndex + 1 + shift);
-	}
+  const shift = end - beginIndex;
+  if (nextLine.length < shift) {
+    setCursorPosition(endIndex + 1 + nextLine.length);
+  } else {
+    setCursorPosition(endIndex + 1 + shift);
+  }
 }
 
 function createTitle(text) {
